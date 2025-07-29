@@ -1,0 +1,43 @@
+{
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
+    "eslint-config-next": "^15.4.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "nodemon": "^3.1.10",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "lint": "eslint 'apps/**/*.ts' 'packages/**/*.ts'",
+    "lint:fix": "eslint 'apps/**/*.ts' 'packages/**/*.ts' --fix",
+    "clean": "rimraf dist",
+    "server:dev": "ts-node apps/server/src/main.ts",
+    "server:dev:watch": "nodemon --exec ts-node apps/server/src/main.ts",
+    "server:build": "tsc",
+    "server:start": "node dist/apps/server/src/main.js",
+    "server:clean": "rimraf dist",
+    "client:dev": "next dev apps/client",
+    "client:build": "next build apps/client",
+    "client:start": "next start apps/client",
+    "client:lint": "next lint apps/client"
+  }
+}
