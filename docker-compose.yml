@@ -1,0 +1,25 @@
+# docker-compose.yml
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: project-wa-postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: qlrqod135
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    container_name: project-wa-redis
+    command: redis-server --requirepass qlrqod135
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data # Redis 데이터 영속성 설정
+
+volumes:
+  postgres_data:
+  redis_data:

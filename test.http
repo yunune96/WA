@@ -1,0 +1,38 @@
+### 1. 회원가입 (Register) - 성공 케이스
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password1234",
+  "username": "testuser"
+}
+
+### 2. 회원가입 (Register) - 동일 이메일로 재시도 (실패 케이스)
+# 위 1번 요청을 먼저 보낸 후에 이 요청을 보내세요.
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password1234",
+  "username": "anotheruser"
+}
+
+### 3. 로그인 (Login) - 실패 케이스 (잘못된 비밀번호)
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "wrongpassword"
+}
+
+### 4. 로그인 (Login) - 성공 케이스
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password1234"
+}

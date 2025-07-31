@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model User {
+  id                String                @id @default(cuid())
+  email             String                @unique
+  password          String
+  username          String?
+  hobbies           User_Hobbies[]
+  sentRequests      Connection_Request[]  @relation("SentRequests")
+  receivedRequests  Connection_Request[]  @relation("ReceivedRequests")
+  chatParticipants  Chat_Room_Participant[]
+  messages          Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hobby {
+  id    Int            @id @default(autoincrement())
+  name  String         @unique
+  users User_Hobbies[]
+}
+
+model User_Hobbies {
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  hobby   Hobby  @relation(fields: [hobbyId], references: [id], onDelete: Cascade)
+  hobbyId Int
+
+  @@id([userId, hobbyId])
+}
+
+model Connection_Request {
+  id          String   @id @default(cuid())
+  requester   User     @relation("SentRequests", fields: [requesterId], references: [id])
+  requesterId String
+  receiver    User     @relation("ReceivedRequests", fields: [receiverId], references: [id])
+  receiverId  String
+  status      String   @default("pending") // 'pending', 'accepted', 'rejected'
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Chat_Room {
+  id           String                  @id @default(cuid())
+  
+  participants Chat_Room_Participant[]
+  messages     Message[]
+
+  createdAt    DateTime                @default(now())
+}
+
+model Chat_Room_Participant {
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  room   Chat_Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId String
+
+  joinedAt DateTime @default(now())
+
+  @@id([userId, roomId])
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  content   String    @db.Text
+  
+  // 메시지가 속한 채팅방
+  room      Chat_Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId    String
+  // 메시지를 보낸 사용자
+  sender    User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId  String
+
+  createdAt DateTime  @default(now())
+}
