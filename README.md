@@ -1,105 +1,124 @@
-# Node.js TypeScript Server
+# WithoutAlone Monorepo
 
-Express.js와 TypeScript를 기반으로 한 서버 애플리케이션입니다.
+위치 기반 취미 매칭 데모 애플리케이션. 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구성입니다.
 
-## 🚀 시작하기
+## 기술 스택
 
-### 필수 요구사항
-- Node.js 18.0.0 이상
-- npm 또는 yarn
+- Client: Next.js 14, React, Zustand, socket.io-client, Mapbox GL
+- Server: NestJS, Prisma, PostgreSQL, Redis, socket.io, Passport-JWT
 
-### 설치
+## 빠른 시작
+
+1. 의존성 설치
 
 ```bash
-# 의존성 설치
 npm install
-
-# 또는 yarn 사용 시
-yarn install
 ```
 
-### 환경 변수 설정
+2. 환경 변수
+
+- 루트의 `.env`는 서버에서 사용합니다. 예시는 `env.example` 참고
+- 클라이언트 전용 환경 변수는 `apps/client/.env.local` 등에 설정하세요
+
+서버(.env 예시)
 
 ```bash
-# 환경 변수 파일 복사
-cp env.example .env
-
-# .env 파일을 편집하여 필요한 설정을 추가
+PORT=3001
+NODE_ENV=development
+JWT_SECRET=your-jwt-secret
+JWT_EXPIRES_IN=24h
+FRONTEND_URL=http://localhost:3000
+DB_URL=postgresql://user:pass@localhost:5432/mydatabase?schema=main
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+# 게이트웨이 CORS용(선택): 프론트 오리진
+NEXT_PUBLIC_CLIENT_URL=http://localhost:3000
 ```
 
-### 개발 서버 실행
+클라이언트(.env.local 예시)
 
 ```bash
-# 개발 모드 (자동 재시작)
-npm run dev:watch
-
-# 또는 일반 개발 모드
-npm run dev
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=YOUR_MAPBOX_TOKEN
 ```
 
-### 프로덕션 빌드 및 실행
+3. 개발 서버 실행
 
 ```bash
-# TypeScript 컴파일
-npm run build
+# 서버 (마이그레이션+시드 포함)
+npm run server:dev
 
-# 프로덕션 서버 실행
-npm start
+# 클라이언트
+npm run client:dev
 ```
 
-## 📁 프로젝트 구조
+4. 프로덕션 빌드/실행
 
-```
-src/
-├── main.ts          # 애플리케이션 진입점
-├── auth/            # 인증 관련 모듈
-├── common/          # 공통 유틸리티
-├── locations/       # 위치 관련 모듈
-└── users/           # 사용자 관련 모듈
+```bash
+npm run server:build && npm run server:start
+npm run client:build && npm run client:start
 ```
 
-## 🔧 스크립트
+## 폴더 구조(요약)
 
-- `npm run dev`: ts-node로 개발 서버 실행
-- `npm run dev:watch`: nodemon으로 파일 변경 감지하며 개발 서버 실행
-- `npm run build`: TypeScript 컴파일
-- `npm start`: 컴파일된 JavaScript 실행
-- `npm run clean`: dist 폴더 정리
-- `npm run lint`: ESLint로 코드 검사
-- `npm run lint:fix`: ESLint로 코드 검사 및 자동 수정
-
-## 🌐 API 엔드포인트
-
-- `GET /`: 서버 상태 확인
-- `GET /health`: 헬스 체크
-- `GET /api/users`: 사용자 목록 (예시)
-
-## 🔒 보안
-
-- Helmet.js를 통한 보안 헤더 설정
-- CORS 설정으로 허용된 도메인만 접근 가능
-- 환경 변수를 통한 민감한 정보 관리
-
-## 📝 로깅
-
-모든 HTTP 요청은 자동으로 로깅됩니다:
 ```
-2024-01-01T00:00:00.000Z - GET /health
-2024-01-01T00:00:01.000Z - POST /api/users
+apps/
+  client/  # Next.js 앱 (UI, 배너/지도/매칭)
+  server/  # NestJS 앱 (REST API, WebSocket, Prisma)
+prisma/    # Prisma 스키마 및 마이그레이션
 ```
 
-## 🛠️ 개발 가이드
+## 백엔드 요약
 
-### 새로운 라우트 추가
+- 글로벌 프리픽스: `/api`
+- 인증(JWT)
+  - 로그인 성공 시 `accessToken`을 바디와 httpOnly 쿠키로 반환
+  - `JwtStrategy`가 Authorization Bearer 또는 쿠키에서 토큰 추출
+  - 만료시간: `JWT_EXPIRES_IN`(기본 24h)
+- 위치/매칭
+  - `PATCH /api/users/me/location` 내 위치 업데이트
+  - `GET /api/locations/nearby-users?radius=500..5000` 주변 사용자 조회
+  - Redis GEO + PostGIS 거리 계산
+- 초대/채팅(소켓)
+  - 초대 생성: `POST /api/chat/invites`
+  - 수락: `POST /api/chat/invites/:inviteId/accept` → 채팅방 생성, `invite:update`
+  - 거절: `POST /api/chat/invites/:inviteId/reject` → `invite:update`
+  - 보낸 초대 동기화: `POST /api/chat/invites/sent/rejected`, `POST /api/chat/invites/sent/accepted`
+  - WebSocket CORS: `NEXT_PUBLIC_CLIENT_URL` 오리진 허용
 
-1. `src/` 폴더에 해당 기능의 폴더 생성
-2. 라우터 파일 생성 (예: `userRoutes.ts`)
-3. `main.ts`의 `getApiRoutes()` 메서드에 라우터 등록
+## 프론트엔드 요약
 
-### 미들웨어 추가
+- API 베이스: `NEXT_PUBLIC_API_URL`(예: http://localhost:3001)
+- 인증
+  - 로그인/검증 성공 시 쿠키 재설정으로 보호 라우트(`/map`, `/matches`, `/chat`) 진입 보장
+- 지도/매칭
+  - 첫 로딩 시 내 위치 업데이트 → 주변 사용자 조회(거리 보장)
+- 소켓 흐름
+  - 로그인 시 `connectSocket()` 호출 → 연결되면 `invite:new`/`invite:update` 실시간 반영
+  - 미연결 시 폴백 폴링(초기 1.5s, 실패 시 최대 8s 백오프)
+- 전역 스토어
+  - `nearbyStore`: 주변 사용자 캐시(로그인/초기화 시 1회)
+  - `inviteStore`: 받은 초대 큐(소켓/폴백)
+  - `noticeStore`: 수락/거절 알림 이력(persist)
+  - `/matches`: 대기중(미응답)인 발신자는 숨김, 응답 후 자동 복귀
 
-`main.ts`의 `initializeMiddlewares()` 메서드에 미들웨어를 추가하세요.
+## CORS/연결 체크리스트
 
-### 에러 처리
+- REST: `FRONTEND_URL`에서 오는 요청만 허용, `credentials: true`
+- Socket.IO: 클라이언트는 `auth: { token }`, 서버 게이트웨이는 동일 `JWT_SECRET`로 검증
+- 네트워크 탭에서 WebSocket이 101 Switching Protocols이면 접속 성공
 
-전역 에러 핸들러가 `initializeErrorHandling()` 메서드에 정의되어 있습니다. 
+## 문제 해결 가이드
+
+- accepted 404:
+  - 요청이 프론트(3000)로 가지 않도록 `NEXT_PUBLIC_API_URL`이 서버(3001)를 가리키는지 확인
+  - 서버 최신 코드로 재기동 후 `POST /api/chat/invites/sent/accepted` 200 확인
+- pending이 계속 보임:
+  - 소켓 미연결 상태에서의 폴링. 연결되면 중단됨(토큰/CORS 확인)
+- 최초 거리 미표시:
+  - 로그인/초기화 시 내 위치 업데이트 후 주변 사용자 조회 순서 유지
+
+## 라이선스
+
+개인 포트폴리오 데모 용도.

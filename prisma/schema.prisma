@@ -18,11 +18,13 @@ model User {
   email             String                @unique
   password          String
   username          String?
+  isEmailVerified   Boolean               @default(false)
   hobbies           User_Hobbies[]
   sentRequests      Connection_Request[]  @relation("SentRequests")
   receivedRequests  Connection_Request[]  @relation("ReceivedRequests")
   chatParticipants  Chat_Room_Participant[]
   messages          Message[]
+  location          User_Location?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -50,6 +52,7 @@ model Connection_Request {
   receiver    User     @relation("ReceivedRequests", fields: [receiverId], references: [id])
   receiverId  String
   status      String   @default("pending") // 'pending', 'accepted', 'rejected'
+  message     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -70,8 +73,11 @@ model Chat_Room_Participant {
   roomId String
 
   joinedAt DateTime @default(now())
+  // 사용자가 해당 방에서 마지막으로 읽은 시각 (없으면 처음 참가 이후 전체가 미확인으로 간주)
+  lastReadAt DateTime?
 
   @@id([userId, roomId])
+  @@index([roomId])
 }
 
 model Message {
@@ -86,4 +92,17 @@ model Message {
   senderId  String
 
   createdAt DateTime  @default(now())
+
+  @@index([roomId, createdAt])
 }
+
+model User_Location {
+  userId    String   @id
+  latitude  Float
+  longitude Float
+  updatedAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+

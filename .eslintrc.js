@@ -1,5 +1,9 @@
 module.exports = {
   root: true,
+  env: {
+    node: true,
+    es2021: true,
+  },
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint/eslint-plugin", "import"],
   extends: [
@@ -10,7 +14,10 @@ module.exports = {
     "prettier",
   ],
   rules: {
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+    ],
     "import/order": [
       "error",
       {
@@ -30,7 +37,12 @@ module.exports = {
   },
   settings: {
     "import/resolver": {
-      typescript: {},
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+      typescript: {
+        project: ["apps/server/tsconfig.json", "apps/client/tsconfig.json"],
+      },
     },
   },
 };

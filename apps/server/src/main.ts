@@ -1,20 +1,34 @@
 import "reflect-metadata";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
 
+  const frontendUrl = configService.get<string>("FRONTEND_URL");
   app.enableCors({
-    origin: true,
+    origin: frontendUrl || true,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
   });
+  app.use(helmet());
+  app.use(cookieParser());
 
+  app.setGlobalPrefix("api");
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -33,7 +47,7 @@ async function bootstrap() {
     SwaggerModule.setup("api-docs", app, document);
   }
 
-  const port = configService.get<number>("PORT") || 3001;
+  const port = configService.get<number>("PORT", 3001);
   await app.listen(port);
 
   console.log(`🚀 Server is running on: http://localhost:${port}`);

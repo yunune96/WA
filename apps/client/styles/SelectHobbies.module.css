@@ -1,0 +1,145 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: #f7f7f7;
+}
+
+.card {
+  width: 100%;
+  max-width: 700px;
+  padding: 2.5rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.countText {
+  color: #0070f3;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.hobbyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 130px);
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  min-height: 150px;
+  transition: all 0.3s ease;
+}
+
+.hobbyButton {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  background-color: #fff;
+  color: #444;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.hobbyButton:hover {
+  border-color: #0070f3;
+  color: #0070f3;
+  transform: translateY(-2px);
+}
+
+.selected {
+  background-color: #0070f3;
+  color: white;
+  border-color: #0070f3;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 112, 243, 0.2);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #111;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #333;
+}
+
+.submitButton:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  background-color: #ffebe9;
+  color: #d8000c;
+  border: 1px solid #ffcdd2;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.categoryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 2rem;
+}
+
+.categoryButton {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  color: #555;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.categoryButton:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+.activeCategory {
+  background-color: #e0f2ff;
+  color: #005bb5;
+  border-color: #0070f3;
+  font-weight: 700;
+}

@@ -1,15 +1,23 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["node"],
-    "experimentalDecorators": true,
+    "outDir": "./dist",
+    "target": "ES2021",
+    "lib": ["ES2021"],
+    "declaration": true,
+    "sourceMap": true,
+
     "emitDecoratorMetadata": true,
-    "baseUrl": "../../",
+    "experimentalDecorators": true,
+
+    "moduleResolution": "node",
+
+    "baseUrl": "./src",
     "paths": {
-      "@generated/*": ["generated/*"]
+      "@/*": ["*"]
     }
   },
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

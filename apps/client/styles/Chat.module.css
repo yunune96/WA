@@ -1,0 +1,211 @@
+.roomContainer {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+}
+
+.messages {
+  overflow: auto;
+  padding: 12px;
+}
+
+.topActionsRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.messageRow {
+  margin-bottom: 10px;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
+
+.name {
+  font-size: 12px;
+  color: #6b7280; /* gray-500 */
+  margin-bottom: 4px;
+}
+
+.line {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.bubble {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 70ch;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bubbleMy {
+  background: #dbeafe; /* blue-100 */
+}
+
+.bubbleOther {
+  background: #f3f4f6; /* gray-100 */
+}
+
+.time {
+  font-size: 11px;
+  color: #9ca3af; /* gray-400 */
+}
+
+.systemRow {
+  display: grid;
+  place-items: center;
+  margin: 16px 0;
+}
+
+.systemText {
+  font-size: 12px;
+  color: #6b7280; /* gray-500 */
+  background: transparent;
+}
+
+.inputBar {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 8px;
+}
+
+.sendBtn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #3b82f6; /* blue-500 */
+  color: #fff;
+}
+
+.modalBtnRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+}
+
+.modalCard {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  display: grid;
+  gap: 12px;
+}
+
+.modalBtn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  background: #f3f4f6; /* gray-100 */
+  color: #111827; /* gray-900 */
+}
+
+.modalBtnPrimary {
+  background: #3b82f6; /* blue-500 */
+  color: #fff;
+  border: none;
+}
+
+.chatListWrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.chatListTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.chatListGrid {
+  display: grid;
+  gap: 8px;
+}
+
+.chatCard {
+  padding: 12px;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.chatCardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chatCardName {
+  font-weight: 600;
+}
+
+.chatCardLast {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.unreadBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: #ef4444; /* red-500 */
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.unreadBadgeAbs {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.leaveBtn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #ef4444; /* red-500 */
+  color: #fff;
+  border: none;
+}

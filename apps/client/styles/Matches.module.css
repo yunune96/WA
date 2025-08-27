@@ -1,0 +1,134 @@
+.container {
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.radiusSelector {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.radiusButton {
+  appearance: none;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 9999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: box-shadow 120ms ease, transform 60ms ease;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.05) inset;
+}
+
+.radiusButton:hover {
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+}
+
+.radiusButton:active {
+  transform: translateY(1px);
+}
+
+.activeRadius {
+  color: #fff;
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #2563eb;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  color: #777;
+}
+
+.userList {
+  display: grid;
+  gap: 1rem;
+}
+
+.userCard {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.username {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.distance {
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: #e0f2ff;
+  color: #005bb5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+}
+
+.commonHobbies,
+.allHobbies {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.commonHobbies strong {
+  color: #0070f3;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%);
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
+}
+
+.ctaBtn:hover {
+  filter: brightness(1.05);
+}
+
+.dangerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
+}

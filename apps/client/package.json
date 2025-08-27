@@ -1,0 +1,28 @@
+{
+  "name": "withoutalone-client",
+  "version": "1.0.0",
+  "description": "클라이언트 애플리케이션 (Next.js)",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "mapbox-gl": "^3.2.0",
+    "next": "14.2.31",
+    "react": "^18",
+    "react-dom": "^18",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/mapbox-gl": "^3.1.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.31",
+    "typescript": "^5"
+  }
+}

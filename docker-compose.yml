@@ -1,7 +1,7 @@
 # docker-compose.yml
 services:
   postgres:
-    image: postgres:13-alpine
+    image: postgis/postgis:16-3.4
     container_name: project-wa-postgres
     environment:
       POSTGRES_USER: myuser

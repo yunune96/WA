@@ -1,0 +1,1 @@
+export declare const User: (...dataOrPipes: ("id" | "email" | "password" | "username" | "createdAt" | "updatedAt" | import("@nestjs/common").PipeTransform<any, any> | import("@nestjs/common").Type<import("@nestjs/common").PipeTransform<any, any>> | undefined)[]) => ParameterDecorator;
