@@ -18,9 +18,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build server and generate Prisma client
-RUN npm run server:build \
- && npx prisma generate
+# Generate Prisma Client first, then build TypeScript
+RUN npx prisma generate --schema=prisma/schema.prisma \
+ && npm run server:build
 
 
 FROM node:20-bullseye-slim AS runner
@@ -37,11 +37,12 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 # Copy built server output and package.json (for clarity)
 COPY --from=builder /app/apps/server/dist ./apps/server/dist
 COPY --from=builder /app/apps/server/package.json ./apps/server/package.json
+COPY --from=builder /app/prisma ./prisma
 
 # App runtime
 ENV PORT=3000
 EXPOSE 3000
-WORKDIR /app/apps/server
-CMD ["node", "-r", "tsconfig-paths/register", "dist/main.js"]
+WORKDIR /app
+CMD ["node", "-r", "tsconfig-paths/register", "apps/server/dist/main.js"]
 
 
