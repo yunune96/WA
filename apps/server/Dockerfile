@@ -29,6 +29,7 @@ WORKDIR /app
 
 # Keep node_modules from deps stage so tsconfig-paths/register is available
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 # Ensure Prisma Client runtime files are present (generated in builder stage)
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
@@ -38,11 +39,13 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/apps/server/dist ./apps/server/dist
 COPY --from=builder /app/apps/server/package.json ./apps/server/package.json
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/apps/server/tsconfig.json ./apps/server/tsconfig.json
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 # App runtime
 ENV PORT=3000
 EXPOSE 3000
-WORKDIR /app
-CMD ["node", "-r", "tsconfig-paths/register", "apps/server/dist/main.js"]
+WORKDIR /app/apps/server
+CMD ["node", "-r", "tsconfig-paths/register", "dist/main.js"]
 
 

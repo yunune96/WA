@@ -6,6 +6,7 @@ import { AuthModule } from "./auth/auth.module";
 import { ChatModule } from "./chat/chat.module";
 import { PrismaModule } from "./core/database/prisma.module";
 import { RedisSetupModule } from "./core/redis/redis-setup.module";
+import { HealthModule } from "./health/health.module";
 import { HobbiesModule } from "./hobbies/hobbies.module";
 import { LocationsModule } from "./locations/locations.module";
 import { UsersModule } from "./users/users.module";
@@ -36,6 +37,7 @@ import { UsersModule } from "./users/users.module";
     HobbiesModule,
     ChatModule,
     LocationsModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],
