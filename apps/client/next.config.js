@@ -1,3 +1,5 @@
+const path = require("path");
+
 const nextConfig = {
   async rewrites() {
     return [
@@ -6,6 +8,11 @@ const nextConfig = {
         destination: "http://localhost:3001/api/:path*",
       },
     ];
+  },
+  webpack: (config) => {
+    // Ensure '@' resolves to the project root (apps/client)
+    config.resolve.alias["@"] = path.resolve(__dirname);
+    return config;
   },
 };
 

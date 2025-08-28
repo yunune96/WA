@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { chatApi, userApi } from "@/lib/api";
 import { connectSocket, getSocket } from "@/lib/socket";
-   import { useAuthStore } from "@/store/authStore";
+import { useAuthStore } from "@/store/authStore";
 import { useChatUnreadStore } from "@/store/chatUnreadStore";
 import styles from "@/styles/Chat.module.css";
 import type { ChatMessageItem, ChatRoomListItem } from "@/types/chat.types";
@@ -36,9 +36,9 @@ export default function ChatRoomPage({
     // 상대 닉네임 로드 (참가자에서 우선 시도)
     (async () => {
       const roomsRes = await chatApi.listMyRooms();
-      const room = (roomsRes.data?.rooms as ChatRoomListItem[] | undefined)?.find(
-        (r) => r.roomId === roomId
-      );
+      const room = (
+        roomsRes.data?.rooms as ChatRoomListItem[] | undefined
+      )?.find((r) => r.roomId === roomId);
       if (room?.counterpartUsername)
         setCounterpartName(room.counterpartUsername);
     })();
