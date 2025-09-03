@@ -2,6 +2,7 @@
 
 export interface ChatRoomListItem {
   roomId: string;
+  counterpartUserId?: string;
   counterpartUsername?: string | null;
   lastMessage?: { content: string; createdAt?: string } | null;
 }
@@ -12,5 +13,3 @@ export interface ChatMessageItem {
   senderId: string;
   createdAt: string;
 }
-
-

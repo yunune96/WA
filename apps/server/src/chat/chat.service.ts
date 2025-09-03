@@ -331,7 +331,9 @@ export class ChatService {
   }
 
   async getUnreadCount(userId: string, roomId: string): Promise<number> {
-    const rows = await this.prisma.$queryRaw<{ joinedAt: Date; lastReadAt: Date | null }[]>`
+    const rows = await this.prisma.$queryRaw<
+      { joinedAt: Date; lastReadAt: Date | null }[]
+    >`
       SELECT "joinedAt", "lastReadAt"
       FROM "main"."Chat_Room_Participant"
       WHERE "userId" = ${userId} AND "roomId" = ${roomId}
@@ -350,12 +352,16 @@ export class ChatService {
     return count;
   }
 
-  async getUnreadCountsForUser(userId: string): Promise<Record<string, number>> {
-    const parts = await this.prisma.$queryRaw<{
-      roomId: string;
-      joinedAt: Date;
-      lastReadAt: Date | null;
-    }[]>`
+  async getUnreadCountsForUser(
+    userId: string
+  ): Promise<Record<string, number>> {
+    const parts = await this.prisma.$queryRaw<
+      {
+        roomId: string;
+        joinedAt: Date;
+        lastReadAt: Date | null;
+      }[]
+    >`
       SELECT "roomId", "joinedAt", "lastReadAt"
       FROM "main"."Chat_Room_Participant"
       WHERE "userId" = ${userId}

@@ -19,10 +19,11 @@ RUN npm run client:build
 FROM node:20-bullseye-slim AS runner
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/apps/client ./
+COPY --from=builder /app/apps/client/.next/standalone ./
+COPY --from=builder /app/apps/client/.next/static ./apps/client/.next/static
 ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 EXPOSE 3000
-CMD ["npm","run","start"]
+CMD ["node","apps/client/server.js"]
 
 

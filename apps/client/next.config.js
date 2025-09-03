@@ -1,6 +1,7 @@
 const path = require("path");
 
 const nextConfig = {
+  output: "standalone",
   async rewrites() {
     return [
       {
