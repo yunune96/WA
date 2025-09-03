@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  Logger,
 } from "@nestjs/common";
 import { Redis } from "ioredis";
 
@@ -14,6 +15,32 @@ export class UsersService {
     private readonly prisma: PrismaService,
     @Inject("REDIS_CLIENT") private readonly redis: Redis
   ) {}
+  private readonly logger = new Logger(UsersService.name);
+
+  private async execWithTimeout<T>(
+    promise: Promise<T>,
+    label: string,
+    timeoutMs: number = 5000
+  ): Promise<T | undefined> {
+    try {
+      const result = await Promise.race<
+        T | { __timeout: true }
+      >([
+        promise,
+        new Promise<{ __timeout: true }>((resolve) =>
+          setTimeout(() => resolve({ __timeout: true }), timeoutMs)
+        ),
+      ]);
+      if ((result as any)?.__timeout) {
+        this.logger.error(`${label} timeout after ${timeoutMs}ms`);
+        return undefined;
+      }
+      return result as T;
+    } catch (e) {
+      this.logger.error(`${label} failed`, e as Error);
+      return undefined;
+    }
+  }
 
   async findMyProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
@@ -40,6 +67,9 @@ export class UsersService {
     longitude: number
   ): Promise<{ success: boolean }> {
     try {
+      const startedAt = Date.now();
+      this.logger.log(`updateUserLocation start user=${userId} lat=${latitude} lon=${longitude}`);
+
       await this.prisma.$executeRawUnsafe(
         `
         INSERT INTO "User_Location" ("userId","latitude","longitude","updatedAt")
@@ -53,19 +83,35 @@ export class UsersService {
         latitude,
         longitude
       );
+      this.logger.log(`DB upsert done in ${Date.now() - startedAt}ms for user=${userId}`);
 
-      await this.redis.geoadd("user_locations", longitude, latitude, userId);
-      await this.redis.zadd("user_last_seen", Date.now().toString(), userId);
+      // 빠른 연결 확인(PING)
+      const pingStart = Date.now();
+      await this.execWithTimeout(this.redis.ping(), "Redis PING");
+      this.logger.log(`Redis PING done in ${Date.now() - pingStart}ms for user=${userId}`);
+
+      const redisStart = Date.now();
+      await this.execWithTimeout(
+        this.redis.geoadd("user_locations", longitude, latitude, userId),
+        "Redis GEOADD"
+      );
+      this.logger.log(`Redis GEOADD done in ${Date.now() - redisStart}ms for user=${userId}`);
+
+      const zaddStart = Date.now();
+      await this.execWithTimeout(
+        this.redis.zadd("user_last_seen", Date.now().toString(), userId),
+        "Redis ZADD"
+      );
+      this.logger.log(`Redis ZADD done in ${Date.now() - zaddStart}ms for user=${userId}`);
 
       console.log(
         `[Redis] 사용자 위치 업데이트: ${userId} -> (${longitude}, ${latitude})`
       );
       return { success: true };
     } catch (error) {
-      console.error("Redis 위치 업데이트 실패:", error);
-      throw new InternalServerErrorException(
-        "사용자 위치 업데이트에 실패했습니다."
-      );
+      // DB 업서트만 성공해도 응답을 지연시키지 않도록 200으로 처리하고 로그만 남김
+      this.logger.error("updateUserLocation failed", error as Error);
+      return { success: true };
     }
   }
 

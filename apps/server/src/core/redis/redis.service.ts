@@ -15,11 +15,23 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   constructor(private readonly configService: ConfigService) {}
 
   onModuleInit() {
+    const host = this.configService.get<string>("REDIS_HOST", "localhost");
+    const port = this.configService.get<number>("REDIS_PORT", 6379);
+    const password = this.configService.get<string>("REDIS_PASSWORD");
+    const tlsFlag = this.configService.get<string>("REDIS_TLS");
+    const useTls = tlsFlag === "true" || tlsFlag === "1";
+
     const redisOptions: RedisOptions = {
-      host: this.configService.get<string>("REDIS_HOST", "localhost"),
-      port: this.configService.get<number>("REDIS_PORT", 6379),
-      password: this.configService.get<string>("REDIS_PASSWORD"),
+      host,
+      port,
+      password,
       maxRetriesPerRequest: 3,
+      enableOfflineQueue: false,
+      // TLS가 필요한 환경(예: ElastiCache Serverless)은 REDIS_TLS=true 로 설정하세요.
+      // servername 지정은 SNI를 위해 필요합니다.
+      tls: useTls ? { servername: host } : undefined,
+      connectTimeout: 5000,
+      commandTimeout: 5000,
 
       retryStrategy: (times: number): number | null => {
         if (times > 10) {
@@ -42,6 +54,18 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     this.client.on("connect", () => {
       this.logger.log("Redis 연결 성공");
+    });
+
+    this.client.on("ready", () => {
+      this.logger.log("Redis 클라이언트 ready 상태");
+    });
+
+    this.client.on("end", () => {
+      this.logger.warn("Redis 연결이 종료되었습니다.");
+    });
+
+    this.client.on("reconnecting", (delay: number) => {
+      this.logger.warn(`Redis 재연결 시도 중... ${delay}ms 후 재시도`);
     });
   }
 

@@ -9,16 +9,18 @@ WORKDIR /app
 COPY package*.json ./
 COPY apps/server/package*.json apps/server/
 
-# Install workspace deps (uses root package-lock.json)
-RUN npm ci
+# Install workspace deps incl. devDependencies (tsc, rimraf, etc.)
+RUN npm ci --include=dev
 
 
 FROM node:20-bullseye-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
 COPY . .
 
 # Generate Prisma Client first, then build TypeScript
+ENV PATH=/app/apps/server/node_modules/.bin:/app/node_modules/.bin:$PATH
 RUN npx prisma generate --schema=prisma/schema.prisma \
  && npm run server:build
 
@@ -29,6 +31,7 @@ WORKDIR /app
 
 # Keep node_modules from deps stage so tsconfig-paths/register is available
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
 COPY --from=builder /app/package.json ./package.json
 
 # Ensure Prisma Client runtime files are present (generated in builder stage)

@@ -6,6 +6,7 @@ import {
   UseGuards,
   Patch,
   Body,
+  Logger,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
@@ -23,6 +24,7 @@ type SafeUser = Omit<UserEntity, "password">;
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  private readonly logger = new Logger(UsersController.name);
 
   @Get("me")
   @UseGuards(AuthGuard("jwt"))
@@ -36,6 +38,9 @@ export class UsersController {
     @User() user: SafeUser,
     @Body() updateLocationDto: UpdateLocationDto
   ) {
+    this.logger.log(
+      `PATCH /users/me/location start user=${user.id} lat=${updateLocationDto.latitude} lon=${updateLocationDto.longitude}`
+    );
     return this.usersService.updateUserLocation(
       user.id,
       updateLocationDto.latitude,

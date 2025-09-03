@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Injectable, Inject, Logger } from "@nestjs/common";
 import { Redis } from "ioredis";
 
 import { PrismaService } from "../core/database/prisma.service";
@@ -9,6 +9,29 @@ export class LocationsService {
     private readonly prisma: PrismaService,
     @Inject("REDIS_CLIENT") private readonly redis: Redis
   ) {}
+  private readonly logger = new Logger(LocationsService.name);
+
+  private async execWithTimeout<T>(
+    promise: Promise<T>,
+    timeoutMs: number = 1500
+  ): Promise<T | undefined> {
+    try {
+      const result = await Promise.race<
+        T | { __timeout: true }
+      >([
+        promise,
+        new Promise<{ __timeout: true }>((resolve) =>
+          setTimeout(() => resolve({ __timeout: true }), timeoutMs)
+        ),
+      ]);
+      if ((result as any)?.__timeout) {
+        return undefined;
+      }
+      return result as T;
+    } catch {
+      return undefined;
+    }
+  }
 
   async findNearbyUsers(currentUserId: string, radiusMeters: number = 500) {
     const currentUserHobbies = await this.prisma.user_Hobbies.findMany({
@@ -22,14 +45,17 @@ export class LocationsService {
 
     const inclusiveRadius = Math.max(0, radiusMeters) + 1; // 1m 버퍼로 경계 포함
 
-    const nearbyUsersData = (await this.redis.georadiusbymember(
-      "user_locations",
-      currentUserId,
-      inclusiveRadius,
-      "m",
-      "WITHDIST",
-      "ASC"
-    )) as [string, string][];
+    const nearbyUsersData = (await this.execWithTimeout(
+      this.redis.georadiusbymember(
+        "user_locations",
+        currentUserId,
+        inclusiveRadius,
+        "m",
+        "WITHDIST",
+        "ASC"
+      ),
+      1500
+    )) as [string, string][] | undefined;
 
     const userDistances: { [key: string]: number } = {};
     if (nearbyUsersData && nearbyUsersData.length > 0) {
@@ -46,19 +72,21 @@ export class LocationsService {
       select: { latitude: true, longitude: true },
     });
     if (me) {
-      const rows = (await this.prisma.$queryRawUnsafe(
+      let rows: Array<{ userId: string; distance: number }> = [];
+      try {
+        rows = (await this.prisma.$queryRawUnsafe(
         `
         SELECT ul."userId",
-               public.ST_DistanceSphere(
-                 public.ST_SetSRID(public.ST_MakePoint(ul."longitude", ul."latitude"),4326),
-                 public.ST_SetSRID(public.ST_MakePoint($1, $2),4326)
+               ST_DistanceSphere(
+                 ST_SetSRID(ST_MakePoint(ul."longitude", ul."latitude"),4326),
+                 ST_SetSRID(ST_MakePoint($1::double precision, $2::double precision),4326)
                ) AS distance
         FROM "User_Location" ul
         WHERE ul."userId" <> $3
-          AND public.ST_DWithin(
-                public.ST_SetSRID(public.ST_MakePoint(ul."longitude", ul."latitude"),4326)::public.geography,
-                public.ST_SetSRID(public.ST_MakePoint($1, $2),4326)::public.geography,
-                $4
+          AND ST_DWithin(
+                ST_SetSRID(ST_MakePoint(ul."longitude", ul."latitude"),4326)::geography,
+                ST_SetSRID(ST_MakePoint($1::double precision, $2::double precision),4326)::geography,
+                $4::double precision
               )
         ORDER BY distance ASC
         LIMIT 200
@@ -68,6 +96,10 @@ export class LocationsService {
         currentUserId,
         inclusiveRadius
       )) as Array<{ userId: string; distance: number }>;
+      } catch (err) {
+        this.logger.error("Nearby users raw query failed", err as Error);
+        rows = [];
+      }
 
       rows.forEach((r) => {
         userDistances[r.userId] = Math.min(

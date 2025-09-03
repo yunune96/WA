@@ -15,8 +15,10 @@ export default function VerifyCallbackPage() {
       router.replace("/verify-email/invalid");
       return;
     }
-    // 서버로 리다이렉트하는 엔드포인트 호출
-    window.location.href = `/api/auth/verify-email?token=${encodeURIComponent(token)}`;
+    // 서버로 리다이렉트하는 엔드포인트 호출(배포에서도 동작하도록 절대경로 사용)
+    const base = process.env.NEXT_PUBLIC_API_URL || window.location.origin;
+    const url = `${base}/api/auth/verify-email?token=${encodeURIComponent(token)}`;
+    window.location.href = url;
   }, [token, router]);
 
   return (
