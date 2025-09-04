@@ -1,0 +1,213 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!../../node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./styles/ConfirmModal.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************/
+.ConfirmModal_backdrop__Qotwn {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.ConfirmModal_modal__LkqaT {
+  width: min(92vw, 420px);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  border: 5px solid #bae6fd; /* sky-blue border */
+}
+
+.ConfirmModal_header__RSX2M {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ConfirmModal_title__4c0ng {
+  font-weight: 700;
+  font-size: 18px;
+  color: #0f172a;
+  margin: 0;
+  text-align: center;
+}
+
+.ConfirmModal_body__RqrYp {
+  padding: 16px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.ConfirmModal_actions__03xzR {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px 16px 16px;
+}
+
+/* Button reset to inherit styles from parent, then provide default modal button look */
+.ConfirmModal_actions__03xzR > button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.ConfirmModal_actions__03xzR > button:first-child {
+  color: #fff;
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
+}
+
+.ConfirmModal_actions__03xzR > button:last-child {
+  color: #fff;
+  background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
+}
+
+/*!*****************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!../../node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./styles/Matches.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************/
+.Matches_container__T11gM {
+  padding: 1.5rem;
+}
+
+.Matches_title__AQOC7 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.Matches_radiusSelector__z8Rxz {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.Matches_radiusButton__TANbJ {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 9999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: box-shadow 120ms ease, transform 60ms ease;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.05) inset;
+}
+
+.Matches_radiusButton__TANbJ:hover {
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.15);
+}
+
+.Matches_radiusButton__TANbJ:active {
+  transform: translateY(1px);
+}
+
+.Matches_activeRadius__qF6U_ {
+  color: #fff;
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #2563eb;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+}
+
+.Matches_centered__f_yAz {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  color: #777;
+}
+
+.Matches_userList__k_yWH {
+  display: grid;
+  grid-gap: 1rem;
+  gap: 1rem;
+}
+
+.Matches_userCard__zCvvx {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.Matches_cardHeader__pAMkf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.Matches_username__MuBd7 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.Matches_distance__h1qq3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: #e0f2ff;
+  color: #005bb5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+}
+
+.Matches_commonHobbies__HACi9,
+.Matches_allHobbies__Y5v5D {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.Matches_commonHobbies__HACi9 strong {
+  color: #0070f3;
+}
+
+.Matches_actions__6Tk4_ {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Matches_ctaBtn__1C_VT {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%);
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25);
+}
+
+.Matches_ctaBtn__1C_VT:hover {
+  filter: brightness(1.05);
+}
+
+.Matches_dangerBtn__V2PGL {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
+}

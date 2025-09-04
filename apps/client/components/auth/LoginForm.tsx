@@ -63,8 +63,6 @@ export default function LoginForm() {
         const redirectTo = searchParams.get(REDIRECT_TO_PARAM);
         if (result.user.needsOnboarding) {
           router.push(`/select-hobbies?userId=${result.user.id}`);
-        } else if (redirectTo && redirectTo !== pathname) {
-          router.replace(redirectTo);
         } else {
           showAlert("로그인 되었습니다");
           router.push("/");

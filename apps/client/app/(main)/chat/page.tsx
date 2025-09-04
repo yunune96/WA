@@ -38,7 +38,7 @@ export default function ChatListPage() {
           >
             <div className={styles.cardHeaderRow}>
               <div className={styles.chatCardName}>
-                {r.counterpartUsername ?? "대화상대"}
+                {r.counterpartUsername ?? "대화상대 없음"}
               </div>
             </div>
             {perRoom[r.roomId] ? (

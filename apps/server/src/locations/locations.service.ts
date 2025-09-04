@@ -77,15 +77,15 @@ export class LocationsService {
         rows = (await this.prisma.$queryRawUnsafe(
         `
         SELECT ul."userId",
-               ST_DistanceSphere(
-                 ST_SetSRID(ST_MakePoint(ul."longitude", ul."latitude"),4326),
-                 ST_SetSRID(ST_MakePoint($1::double precision, $2::double precision),4326)
+               public.ST_DistanceSphere(
+                 public.ST_SetSRID(public.ST_MakePoint(ul."longitude", ul."latitude"),4326),
+                 public.ST_SetSRID(public.ST_MakePoint($1::double precision, $2::double precision),4326)
                ) AS distance
         FROM "User_Location" ul
         WHERE ul."userId" <> $3
-          AND ST_DWithin(
-                ST_SetSRID(ST_MakePoint(ul."longitude", ul."latitude"),4326)::geography,
-                ST_SetSRID(ST_MakePoint($1::double precision, $2::double precision),4326)::geography,
+          AND public.ST_DWithin(
+                public.ST_SetSRID(public.ST_MakePoint(ul."longitude", ul."latitude"),4326)::public.geography,
+                public.ST_SetSRID(public.ST_MakePoint($1::double precision, $2::double precision),4326)::public.geography,
                 $4::double precision
               )
         ORDER BY distance ASC
