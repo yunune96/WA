@@ -10,6 +10,8 @@ import { HealthModule } from "./health/health.module";
 import { HobbiesModule } from "./hobbies/hobbies.module";
 import { LocationsModule } from "./locations/locations.module";
 import { UsersModule } from "./users/users.module";
+import { PaymentsModule } from "./payments/payments.module";
+import { CoinsModule } from "./coins/coins.module";
 
 @Module({
   imports: [
@@ -28,6 +30,17 @@ import { UsersModule } from "./users/users.module";
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
         REDIS_PASSWORD: Joi.string().optional().allow(""),
+        SERVER_PUBLIC_URL: Joi.string().uri().optional(),
+        COIN_UNIT_PRICE: Joi.number().default(100),
+        PAYMENT_PROVIDER: Joi.string().valid("toss", "kakao").optional(),
+        TOSS_SECRET_KEY: Joi.string().optional(),
+        TOSS_MOCK: Joi.boolean().optional().default(false),
+        KAKAOPAY_ADMIN_KEY: Joi.string().optional(),
+        KAKAOPAY_CID: Joi.string().optional(),
+        KAKAOPAY_OPEN_SECRET_KEY: Joi.string().optional(),
+        KAKAOPAY_OPEN_API_BASE: Joi.string().uri().optional(),
+        PAYMENT_SUCCESS_URL: Joi.string().uri().optional(),
+        PAYMENT_FAIL_URL: Joi.string().uri().optional(),
       }),
     }),
     RedisSetupModule,
@@ -38,6 +51,8 @@ import { UsersModule } from "./users/users.module";
     ChatModule,
     LocationsModule,
     HealthModule,
+    PaymentsModule,
+    CoinsModule,
   ],
   controllers: [],
   providers: [],

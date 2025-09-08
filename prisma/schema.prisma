@@ -14,17 +14,21 @@ datasource db {
 }
 
 model User {
-  id                String                @id @default(cuid())
-  email             String                @unique
-  password          String
-  username          String?
-  isEmailVerified   Boolean               @default(false)
-  hobbies           User_Hobbies[]
-  sentRequests      Connection_Request[]  @relation("SentRequests")
-  receivedRequests  Connection_Request[]  @relation("ReceivedRequests")
-  chatParticipants  Chat_Room_Participant[]
-  messages          Message[]
-  location          User_Location?
+  id               String                  @id @default(cuid())
+  email            String                  @unique
+  password         String
+  username         String?
+  isEmailVerified  Boolean                 @default(false)
+  hobbies          User_Hobbies[]
+  sentRequests     Connection_Request[]    @relation("SentRequests")
+  receivedRequests Connection_Request[]    @relation("ReceivedRequests")
+  chatParticipants Chat_Room_Participant[]
+  messages         Message[]
+  location         User_Location?
+  // Coins/Payments relations
+  wallet           Wallet?
+  paymentOrders    PaymentOrder[]
+  coinTransactions CoinTransaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -58,12 +62,12 @@ model Connection_Request {
 }
 
 model Chat_Room {
-  id           String                  @id @default(cuid())
-  
+  id String @id @default(cuid())
+
   participants Chat_Room_Participant[]
   messages     Message[]
 
-  createdAt    DateTime                @default(now())
+  createdAt DateTime @default(now())
 }
 
 model Chat_Room_Participant {
@@ -72,7 +76,7 @@ model Chat_Room_Participant {
   room   Chat_Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId String
 
-  joinedAt DateTime @default(now())
+  joinedAt   DateTime  @default(now())
   // 사용자가 해당 방에서 마지막으로 읽은 시각 (없으면 처음 참가 이후 전체가 미확인으로 간주)
   lastReadAt DateTime?
 
@@ -81,17 +85,17 @@ model Chat_Room_Participant {
 }
 
 model Message {
-  id        String    @id @default(cuid())
-  content   String    @db.Text
-  
-  // 메시지가 속한 채팅방
-  room      Chat_Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  roomId    String
-  // 메시지를 보낸 사용자
-  sender    User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  senderId  String
+  id      String @id @default(cuid())
+  content String @db.Text
 
-  createdAt DateTime  @default(now())
+  // 메시지가 속한 채팅방
+  room     Chat_Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId   String
+  // 메시지를 보낸 사용자
+  sender   User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId String
+
+  createdAt DateTime @default(now())
 
   @@index([roomId, createdAt])
 }
@@ -102,7 +106,57 @@ model User_Location {
   longitude Float
   updatedAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// ==========================
+// Coins / Payments
+// ==========================
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  CANCELED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  toss
+  kakao
+}
+
+model Wallet {
+  userId    String   @id
+  balance   Int      @default(0) // 보유 코인 수
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PaymentOrder {
+  id              String          @id @default(cuid())
+  userId          String
+  coins           Int
+  amountKrw       Int
+  provider        PaymentProvider
+  status          PaymentStatus   @default(PENDING)
+  providerOrderId String?         @unique
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions CoinTransaction[]
+}
+
+model CoinTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  change    Int // +적립, -사용
+  reason    String // 'purchase' | 'spend' | 'refund' 등
+  orderId   String?
+  createdAt DateTime @default(now())
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order PaymentOrder? @relation(fields: [orderId], references: [id])
+}

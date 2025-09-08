@@ -1,8 +1,7 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(main)/matches/page": "app/(main)/matches/page.js",
-  "/(main)/chat/[roomId]/page": "app/(main)/chat/[roomId]/page.js",
-  "/(main)/chat/page": "app/(main)/chat/page.js",
-  "/(main)/map/page": "app/(main)/map/page.js",
-  "/(main)/page": "app/(main)/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/(main)/coins/page": "app/(main)/coins/page.js",
+  "/(main)/coins/success/page": "app/(main)/coins/success/page.js",
+  "/(main)/page": "app/(main)/page.js",
+  "/(main)/profile/page": "app/(main)/profile/page.js"
 }

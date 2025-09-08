@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { userApi } from "@/lib/api";
+import { userApi, coinsApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import styles from "@/styles/Profile.module.css";
 import type { UserWithoutPassword } from "@/types/user.types";
@@ -21,6 +21,7 @@ export default function ProfilePage() {
     user ? { id: user.id, email: user.email, username: user.username } : null
   );
   const [hobbies, setHobbies] = useState<string[]>([]);
+  const [balance, setBalance] = useState<number | null>(null);
   const [editing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
   const [saving, setSaving] = useState(false);
@@ -58,6 +59,13 @@ export default function ProfilePage() {
       } catch (e) {
         console.warn("getUsersPublic failed", e);
         setHobbies([]);
+      }
+      try {
+        const b = await coinsApi.getBalance();
+        if (!b.error) setBalance(b.data!.balance);
+      } catch (e) {
+        console.warn("getBalance failed", e);
+        setBalance(null);
       }
     })();
   }, [ready, isLoggedIn, user?.id]);
@@ -118,6 +126,11 @@ export default function ProfilePage() {
           <div className={styles.email}>{me?.email ?? "-"}</div>
         </div>
         <div className={styles.sectionTitle}>🔍관심사</div>
+        <div className={styles.balanceRow} title="코인 잔액">
+          💰 코인 잔액 : {balance === null ? "-" : `${balance} 코인`}
+        </div>
+        <div className={styles.divider} />
+        
         {hobbies.length ? (
           <div className={styles.chipGrid}>
             {hobbies.map((h, i) => (

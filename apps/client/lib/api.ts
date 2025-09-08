@@ -347,3 +347,51 @@ export const chatApi = {
       }>
     >,
 };
+
+// Payments & Coins API
+export const paymentsApi = {
+  checkout: (coins: number, provider: "toss" | "kakao") =>
+    apiClient["request"].call(apiClient, `/api/payments/checkout`, {
+      method: "POST",
+      body: JSON.stringify({ coins, provider }),
+    }) as Promise<
+      ApiResponse<{
+        provider: "toss" | "kakao";
+        orderId: string;
+        amountKrw: number;
+        payload: any;
+      }>
+    >,
+  tossConfirm: (
+    paymentKey: string,
+    orderId: string,
+    amount: number
+  ) =>
+    apiClient["request"].call(apiClient, `/api/payments/toss/confirm`, {
+      method: "POST",
+      body: JSON.stringify({ paymentKey, orderId, amount }),
+    }) as Promise<ApiResponse<{ ok: boolean }>>,
+};
+
+export const coinsApi = {
+  getBalance: () =>
+    apiClient["request"].call(apiClient, `/api/coins/balance`) as Promise<
+      ApiResponse<{ balance: number }>
+    >,
+  getTransactions: () =>
+    apiClient["request"].call(apiClient, `/api/coins/transactions`) as Promise<
+      ApiResponse<
+        Array<{
+          id: string;
+          change: number;
+          reason: string;
+          createdAt: string;
+        }>
+      >
+    >,
+  spend: (coins: number, reason?: string) =>
+    apiClient["request"].call(apiClient, `/api/coins/spend`, {
+      method: "POST",
+      body: JSON.stringify({ coins, reason }),
+    }) as Promise<ApiResponse<{ balance: number }>>,
+};

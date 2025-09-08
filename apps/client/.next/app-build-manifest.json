@@ -1,10 +1,9 @@
 {
   "pages": {
-    "/(main)/page": [
+    "/(main)/coins/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(main)/page.css",
-      "static/chunks/app/(main)/page.js"
+      "static/chunks/app/(main)/coins/page.js"
     ],
     "/(main)/layout": [
       "static/chunks/webpack.js",
@@ -18,35 +17,27 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(auth)/login/page": [
+    "/(main)/coins/success/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(auth)/login/page.css",
-      "static/chunks/app/(auth)/login/page.js"
+      "static/chunks/app/(main)/coins/success/page.js"
     ],
-    "/(main)/chat/page": [
+    "/(main)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(main)/chat/page.css",
-      "static/chunks/app/(main)/chat/page.js"
+      "static/css/app/(main)/page.css",
+      "static/chunks/app/(main)/page.js"
     ],
-    "/(main)/chat/[roomId]/page": [
+    "/(main)/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(main)/chat/[roomId]/page.css",
-      "static/chunks/app/(main)/chat/[roomId]/page.js"
+      "static/css/app/(main)/profile/page.css",
+      "static/chunks/app/(main)/profile/page.js"
     ],
-    "/(main)/matches/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(main)/matches/page.css",
-      "static/chunks/app/(main)/matches/page.js"
-    ],
-    "/(main)/map/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(main)/map/page.css",
-      "static/chunks/app/(main)/map/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
