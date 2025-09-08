@@ -1,12 +1,10 @@
 # WithoutAlone
 
-위치 기반 취미 매칭 데모 애플리케이션. 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구성입니다.
+위치 기반 취미 매칭 데모 웹사이트 타입스크립트(TypeScript) 기반 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구조의 프로젝트입니다.
 
 ## 기술 스택
 
-- Client: Next.js 14, React, Zustand, socket.io-client, Mapbox GL
-- Server: NestJS, Prisma, PostgreSQL, Redis, socket.io, Passport-JWT
-
+-  ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ## 빠른 시작
 
 1. 의존성 설치
