@@ -2,6 +2,27 @@
 
 프로젝트 요약: 위치 기반 취미 매칭 데모 애플리케이션. 실시간 초대/채팅, 지도 기반 주변 탐색, JWT 인증과 httpOnly 쿠키, Redis GEO + PostGIS 거리 계산을 통해 “빠르게 매칭되고 바로 대화”까지 이어지는 경험을 제공합니다.
 
+## 기술 스택
+
+- ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+
+## 주요 기능
+
+- **인증/인가**: JWT 기반 로그인, httpOnly 쿠키로 세션 유지, 미들웨어 가드
+- **위치 업데이트/주변 탐색**: 로그인 직후 내 위치 업데이트 → 반경 내 사용자 조회
+- **초대/응답/채팅**: 초대 생성/수락/거절 흐름과 실시간 업데이트, 채팅 저장
+- **전역 상태 관리**: `nearbyStore`, `inviteStore`, `noticeStore`, `chatUnreadStore(persist)`
+- **폴백 전략**: 소켓 미연결 시 주기적 폴링(백오프), 연결 시 자동 전환
+- **배포**: AWS를 이용한 배포 및 REST API 프록시
+
+## 사용 시나리오(3단계)
+
+1. 로그인 후 자동으로 내 위치를 갱신하고 주변 사용자를 지도에서 확인합니다.
+2. 관심 있는 사용자에게 초대를 보내고, 수락/거절 상태를 실시간으로 확인합니다.
+3. 매칭되면 바로 채팅으로 전환하여 대화를 시작합니다.
+
+위치 기반 취미 매칭 데모 웹사이트 타입스크립트(TypeScript) 기반 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구조의 프로젝트입니다.
+
 ## 하이라이트
 
 - **위치 기반 매칭**: Redis GEO와 PostGIS를 조합하여 반경 검색과 거리 정렬을 안정적으로 처리
@@ -21,114 +42,7 @@
 
 ## 아키텍처 다이어그램
 
-```mermaid
-graph LR
-  subgraph "클라이언트(Next.js)"
-    CApp["Next.js 14 앱<br/>(React, Zustand, Mapbox GL)"]
-    CMW["Next.js 미들웨어<br/>(보호 라우트 가드/리디렉션)"]
-    CSock["socket.io-client"]
-    CMap["Mapbox GL 뷰"]
-  end
-
-  subgraph "서버(NestJS)"
-    SAPI["REST API(/api)"]
-    SGW["Socket.IO 게이트웨이"]
-    AUTH["인증(JWT, Passport-JWT)"]
-    LOC["위치/매칭 서비스<br/>(Redis GEO + PostGIS)"]
-    CHAT["채팅/초대 서비스"]
-    PRISMA["Prisma ORM"]
-  end
-
-  subgraph "데이터/외부 서비스"
-    REDIS["Redis(GEO, 캐시)"]
-    PG["PostgreSQL(PostGIS)"]
-    MAPT["Mapbox Tiles API"]
-  end
-
-  CApp -->|"HTTPS/JSON, credentials:true(CORS)"| SAPI
-  CSock -->|"WebSocket 연결(JWT 인증)"| SGW
-  CApp -.->|"보호 라우트 체크"| CMW
-  CMap -->|"타일 로드"| MAPT
-
-  SAPI --> AUTH
-  SAPI --> LOC
-  SAPI --> CHAT
-  SGW --> CHAT
-  LOC --> PRISMA
-  CHAT --> PRISMA
-  LOC --> REDIS
-  PRISMA --> PG
-
-  CHAT -. "invite:new / invite:update 브로드캐스트" .-> SGW
-```
-
-## 주요 실행 흐름(요약)
-
-```mermaid
-sequenceDiagram
-  autonumber
-  participant U as "브라우저"
-  participant M as "미들웨어(Next.js)"
-  participant C as "클라이언트(Next.js)"
-  participant S as "서버(NestJS API)"
-  participant G as "소켓 게이트웨이(Socket.IO)"
-  participant R as "Redis(GEO)"
-  participant D as "PostgreSQL(Prisma)"
-
-  U->>M: "보호 라우트 요청(/map|/matches|/chat)"
-  alt "비로그인"
-    M-->>U: "로그인으로 리다이렉트(/login?redirect_to=...)"
-    U->>C: "로그인 폼 제출"
-    C->>S: "POST /api/auth/login"
-    S-->>U: "Set-Cookie accessToken + 바디 토큰"
-  else "로그인됨"
-    M-->>C: "통과"
-  end
-
-  C->>S: "PATCH /api/users/me/location"
-  S->>R: "현재 위치 업데이트(GEOSET)"
-  R-->>S: "OK"
-
-  C->>S: "GET /api/locations/nearby-users?radius=..."
-  S->>R: "주변 사용자 조회(GEORADIUS)"
-  R-->>S: "좌표/거리 리스트"
-  S-->>C: "주변 사용자 응답"
-
-  C->>G: "connectSocket(token)"
-  G-->>C: "invite:new / invite:update 이벤트"
-  note over C: "미연결 시 폴백 폴링(1.5s→최대 8s 백오프)"
-
-  C->>S: "POST /api/chat/invites (초대 발송)"
-  S-->>G: "상대에게 invite:new 브로드캐스트"
-
-  C->>S: "POST /api/chat/invites/:id/accept|reject"
-  S->>D: "수락 시 채팅방 생성/업데이트"
-  S-->>G: "invite:update(양쪽 전송)"
-
-  C<->>G: "채팅 메시지 송수신"
-  G->>S: "메시지 처리"
-  S->>D: "메시지 저장"
-```
-
-## 주요 기능
-
-- **인증/인가**: JWT 기반 로그인, httpOnly 쿠키로 세션 유지, 미들웨어 가드
-- **위치 업데이트/주변 탐색**: 로그인 직후 내 위치 업데이트 → 반경 내 사용자 조회
-- **초대/응답/채팅**: 초대 생성/수락/거절 흐름과 실시간 업데이트, 채팅 저장
-- **전역 상태 관리**: `nearbyStore`, `inviteStore`, `noticeStore`, `chatUnreadStore(persist)`
-- **폴백 전략**: 소켓 미연결 시 주기적 폴링(백오프), 연결 시 자동 전환
-
-## 사용 시나리오(3단계)
-
-1. 로그인 후 자동으로 내 위치를 갱신하고 주변 사용자를 지도에서 확인합니다.
-2. 관심 있는 사용자에게 초대를 보내고, 수락/거절 상태를 실시간으로 확인합니다.
-3. 매칭되면 바로 채팅으로 전환하여 대화를 시작합니다.
-
-위치 기반 취미 매칭 데모 웹사이트 타입스크립트(TypeScript) 기반 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구조의 프로젝트입니다.
-
-## 기술 스택
-
-- ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+<img width="2353" height="1536" alt="image" src="https://github.com/user-attachments/assets/83132ee2-c621-4b7a-bea2-3d2e89bb54c5" />
 
 ## 빠른 시작
 
