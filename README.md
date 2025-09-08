@@ -1,4 +1,4 @@
-# WithoutAlone Monorepo
+# WithoutAlone
 
 위치 기반 취미 매칭 데모 애플리케이션. 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구성입니다.
 
