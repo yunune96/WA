@@ -10,16 +10,18 @@
 
 - **인증/인가**: JWT 기반 로그인, httpOnly 쿠키로 세션 유지, 미들웨어 가드
 - **위치 업데이트/주변 탐색**: 로그인 직후 내 위치 업데이트 → 반경 내 사용자 조회
+- **결제**: 토스, 카카오페이 등 외부 API를 사용한 결제 구현
 - **초대/응답/채팅**: 초대 생성/수락/거절 흐름과 실시간 업데이트, 채팅 저장
 - **전역 상태 관리**: `nearbyStore`, `inviteStore`, `noticeStore`, `chatUnreadStore(persist)`
 - **폴백 전략**: 소켓 미연결 시 주기적 폴링(백오프), 연결 시 자동 전환
 - **배포**: AWS를 이용한 배포 및 REST API 프록시
 
-## 사용 시나리오(3단계)
+## 사용 시나리오
 
 1. 로그인 후 자동으로 내 위치를 갱신하고 주변 사용자를 지도에서 확인합니다.
 2. 관심 있는 사용자에게 초대를 보내고, 수락/거절 상태를 실시간으로 확인합니다.
 3. 매칭되면 바로 채팅으로 전환하여 대화를 시작합니다.
+4. /profile 세션에서 개인정보 수정 및 결제
 
 위치 기반 취미 매칭 데모 웹사이트 타입스크립트(TypeScript) 기반 프론트엔드(Next.js)와 백엔드(NestJS)를 분리한 모노레포 구조의 프로젝트입니다.
 
@@ -98,25 +100,6 @@ npm run server:dev
 # 클라이언트
 npm run client:dev
 ```
-
-4. 프로덕션 빌드/실행
-
-```bash
-npm run server:build && npm run server:start
-npm run client:build && npm run client:start
-```
-
-## 로컬 개발 체크리스트
-
-- 서버 루트 `.env` 설정
-  - `FRONTEND_URL=http://localhost:3000`
-  - `DB_URL`, `JWT_SECRET`, `REDIS_*` 등 개발용 값
-- 클라이언트 `apps/client/.env.local`
-  - `NEXT_PUBLIC_API_URL=http://localhost:3001`
-  - `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=...`
-- 실행 순서
-  - `npm run server:dev` → `npm run client:dev`
-- 브라우저에 남아있는 이전 배포 쿠키/스토리지 영향이 있으면 `accessToken` 쿠키와 `localStorage`의 `accessToken`을 삭제하고 시도
 
 ## 폴더 구조(요약)
 
@@ -230,12 +213,6 @@ aws ecs update-service --cluster <CLUSTER> --service <SERVICE> --task-definition
 - ECR의 해당 태그 `imageDigest`와, ECS 실행 중 태스크의 `imageDigest`가 일치하는지 확인
 - 브라우저 Network 탭 `Request URL`이 `https://api.withoutalone.com/...` 인지 확인
 
-## 태그 전략(권장)
-
-- 단기: `latest` 또는 `prod` 고정 태그를 서비스가 참조 → 새 이미지 푸시 후 `force-new-deployment`
-- 장기: 불변 태그(날짜/커밋 SHA) + 운영 포인터(`:prod`) 병행
-  - 추적/롤백은 불변 태그로, 운영은 `:prod`만 바라보게 구성
-
 ## 로그인 리디렉션/캐시 이슈 가이드
 
 - 증상: 로그인 전에 보호 페이지(`/map`, `/matches`, `/chat`)가 `prefetch`되면서 미들웨어 리디렉션(`/login?redirect_to=...`)이 캐시 → 로그인 직후에도 다시 로그인 화면으로 이동
@@ -244,10 +221,6 @@ aws ecs update-service --cluster <CLUSTER> --service <SERVICE> --task-definition
     - `if (request.headers.get("next-router-prefetch") === "1") return NextResponse.next();`
   - 보호 탭 링크는 `prefetch={false}` 또는 비로그인 시 `href`를 `/login?redirect_to=...`로 렌더링
   - 로그인 성공 후 `router.replace(target); router.refresh();`로 캐시 무효화 보강
-
-## 채팅 배지(persist) 이슈 팁
-
-- `chatUnreadStore`는 `persist` 사용 → 로그아웃 시 카운트를 비우고, 네비게이션 배지는 로그인 상태에서만 표시하도록 렌더링 분기
 
 ## CORS/연결 체크리스트
 
@@ -265,46 +238,6 @@ aws ecs update-service --cluster <CLUSTER> --service <SERVICE> --task-definition
 - 최초 거리 미표시:
   - 로그인/초기화 시 내 위치 업데이트 후 주변 사용자 조회 순서 유지
 
-## 라이선스
-
-개인 포트폴리오 데모 용도.
-
-## CI/CD 파이프라인(예시)
-
-### GitHub Actions 요약
-
-- 주요 단계: checkout → Node 세팅 → 클라이언트/서버 빌드(ECR 태그) → ECR 로그인/푸시 → ECS 롤아웃
-- 핵심 포인트
-  - 클라이언트 빌드 시 `--build-arg NEXT_PUBLIC_API_URL` 반드시 주입
-  - 태그 전략: 불변 태그(`YYYY-MM-DD-N` 또는 `GIT_SHA`) + 운영 포인터(`:prod`) 병행 권장
-  - 배포는 `force-new-deployment` 또는 새 태스크 정의 리비전 적용
-
-### 배포 실패 시 롤백
-
-- `:prod` 포인터 방식: 직전 불변 태그로 `docker tag <immutable> :prod` 후 푸시 → `force-new-deployment`
-- 불변 태그 방식: ECS 서비스에 이전 태스크 정의(이전 리비전)로 업데이트
-
-## 헬스체크 / 오토스케일링
-
-- 헬스체크 권장
-  - Client(Target Group): HTTP GET `/` 200, 응답 타임아웃 5s, 간격 30s, 비정상 임계 2~3
-  - Server(Target Group): 전용 엔드포인트 `/api/health` 추가 권장(200 OK). 없다면 임시로 TCP 3000 레벨 체크 사용 가능
-  - ALB Idle Timeout: WebSocket 고려 120s 이상 권장
-- 오토스케일링(ECS Service Auto Scaling)
-  - TargetTracking: 평균 CPUUtilization 50~60% 또는 ALB RequestCountPerTarget
-  - 최소 1, 최대 N(트래픽 기준 산정). 배포 전략은 기본 롤링(헬시 퍼센트 100/200) 유지 권장
-
-## 모니터링 / 로깅
-
-- CloudWatch Logs
-  - 클라이언트/서버 각각 로그 그룹 분리, 보존기간 설정(예: 7/30일)
-  - 심각 레벨(에러) 필터링 지표화 → 알람 생성
-- 메트릭/알람
-  - ALB: 5XXError, TargetResponseTime, RejectedConnectionCount
-  - ECS: CPUUtilization, MemoryUtilization, Desired/Running Tasks
-  - RDS/Redis(해당 시): CPU, 연결 수, 메모리, 스왑
-  - SNS/Slack 등으로 알림 연동
-
 ## 보안/설정 베스트 프랙티스
 
 - 서버 비밀값(JWT_SECRET, DB_URL, SMTP 등)은 SSM Parameter Store 또는 Secrets Manager로 관리
@@ -314,10 +247,3 @@ aws ecs update-service --cluster <CLUSTER> --service <SERVICE> --task-definition
 - 소켓
   - ALB 443 Listener 하에서 WebSocket 동작(HTTP/1.1), Idle Timeout 조정
   - 필요 시 Sticky Sessions 비활성(기본 라운드로빈) 또는 세션 고정 요구사항 검토
-
-## 운영 팁
-
-- 브라우저에서 보호 라우트 prefetch 캐시 이슈 발생 시: 미들웨어의 `next-router-prefetch` 헤더 우회 + 링크 `prefetch={false}` 적용 검토
-- 채팅 뱃지 카운트 persist: 로그아웃 시 스토어 초기화, 로그인 상태 조건부 렌더링
-- 이미지 태그 관리
-  - 불변 태그 + `:prod` 포인터 추천. 실행 중 실제 다이제스트는 ECS "실행 중 태스크" 상세에서 확인 가능
