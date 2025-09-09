@@ -125,12 +125,21 @@ export default function ProfilePage() {
           </div>
           <div className={styles.email}>{me?.email ?? "-"}</div>
         </div>
-        <div className={styles.sectionTitle}>🔍관심사</div>
         <div className={styles.balanceRow} title="코인 잔액">
-          💰 코인 잔액 : {balance === null ? "-" : `${balance} 코인`}
+          <span>
+            💰 코인 잔액 : {balance === null ? "-" : `${balance} 코인`}
+          </span>
+          <button
+            className={styles.chargeBtn}
+            onClick={() => router.push("/coins")}
+            title="코인 충전하러 가기"
+          >
+            ⚡ 코인 충전
+          </button>
         </div>
+        <div className={styles.sectionTitle}>🔍관심사</div>
         <div className={styles.divider} />
-        
+
         {hobbies.length ? (
           <div className={styles.chipGrid}>
             {hobbies.map((h, i) => (

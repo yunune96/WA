@@ -1,0 +1,106 @@
+.wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.providerRow {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.brandBtn {
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.activeTossBtn {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.activeKakaoBtn {
+  border-color: #fee500;
+  box-shadow: 0 0 0 3px rgba(254, 229, 0, 0.25);
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pack {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+}
+
+.coins {
+  font-weight: 800;
+}
+
+.price {
+  color: #6b7280;
+}
+
+.buyBtn {
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 0;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.05s ease, box-shadow 0.15s ease;
+}
+
+.buyBtn:active { transform: translateY(1px); }
+
+.divider { margin: 16px 0; border-top: 1px solid #eef1f5; }
+
+.widgetArea { display: grid; gap: 8px; }
+
+.balancePanel { margin-top: 16px; }
+
+.refreshBtn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+.refreshBtn:hover { background: #f9fafb; }
+.refreshBtn:active { transform: translateY(1px); }
+
+.brandIcon { width: 24px; height: 24px; display: inline-block; }
+.brandImg { width: 24px; height: 24px; display: inline-block; }
+.brandImgLarge { height: 28px; width: auto; display: inline-block; }
+
+

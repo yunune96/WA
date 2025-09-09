@@ -1,0 +1,10 @@
+<svg width="96" height="32" viewBox="0 0 96 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+  <title>KakaoPay</title>
+  <!-- Yellow rounded pill -->
+  <rect x="0.5" y="4.5" width="95" height="23" rx="11.5" fill="#FEE500" stroke="#F3D900"/>
+  <!-- Chat bubble -->
+  <path fill="#111827" d="M18 11a5 5 0 1 0 0 10c.46 0 .9-.06 1.32-.18.23-.06.48.02.62.2l1.7 2.17c.2.26.6.16.68-.16l.52-2.1c.06-.27.28-.47.55-.53A5 5 0 0 0 18 11z"/>
+  <!-- pay text (system font; not embedded glyphs) -->
+  <text x="32" y="22" font-size="14" font-weight="700" fill="#111827" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">pay</text>
+</svg>
+

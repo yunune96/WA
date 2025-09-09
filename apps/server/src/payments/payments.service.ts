@@ -152,9 +152,10 @@ export class PaymentsService {
       });
     } else {
       // 모의결제: paymentKey 없이 바로 승인 처리
+      // providerOrderId는 @unique 이므로 주문별로 유니크한 값으로 저장
       await this.prisma.paymentOrder.update({
         where: { id: body.orderId },
-        data: { providerOrderId: "MOCK" },
+        data: { providerOrderId: `MOCK-${body.orderId}` },
       });
     }
     await this.applyPaid(body.orderId);
@@ -225,17 +226,19 @@ export class PaymentsService {
 
   private async applyPaid(orderId: string) {
     await this.prisma.$transaction(async (tx) => {
-      const order = await tx.paymentOrder.findUnique({
-        where: { id: orderId },
-      });
-      if (!order) return;
-      if (order.status === PaymentStatus.PAID) return; // 멱등성
-
-      await tx.paymentOrder.update({
-        where: { id: orderId },
+      // 1) 상태 전이: PENDING -> PAID 를 원자적으로 시도
+      const updated = await tx.paymentOrder.updateMany({
+        where: { id: orderId, status: { not: PaymentStatus.PAID } },
         data: { status: PaymentStatus.PAID },
       });
+      // 이미 다른 트랜잭션이 처리했다면 아무 것도 하지 않음(멱등)
+      if (updated.count === 0) return;
 
+      // 2) 최신 주문 정보 조회
+      const order = await tx.paymentOrder.findUnique({ where: { id: orderId } });
+      if (!order) return;
+
+      // 3) 코인 적립 및 거래 기록
       await tx.wallet.upsert({
         where: { userId: order.userId },
         create: { userId: order.userId, balance: order.coins },

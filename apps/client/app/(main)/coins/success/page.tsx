@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { coinsApi } from "@/lib/api";
 import { paymentsApi } from "@/lib/api";
@@ -24,7 +24,11 @@ export default function CoinsSuccessPage() {
       : NaN;
 
     // Toss: 위젯 성공( paymentKey 존재 ) 또는 모의결제(TOSS_MOCK, paymentKey 없음) 모두 승인 호출
-    if (provider === "toss" && orderIdQ && !Number.isNaN(amount)) {
+    // React StrictMode(dev)에서 useEffect가 두 번 실행되는 것을 방지하기 위한 가드
+    const onceKey = orderIdQ ? `toss_confirmed_${orderIdQ}` : null;
+    const alreadyDone = onceKey ? sessionStorage.getItem(onceKey) === "1" : true;
+    if (provider === "toss" && orderIdQ && !Number.isNaN(amount) && !alreadyDone) {
+      sessionStorage.setItem(onceKey!, "1");
       paymentsApi
         .tossConfirm(paymentKey ?? "MOCK", orderIdQ, amount)
         .then(() => {

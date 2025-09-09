@@ -1,0 +1,112 @@
+/*!***************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!../../node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./styles/Coins.module.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************/
+.Coins_wrapper__z4_i6 {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.Coins_header__b8xJd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.Coins_title__ok32q {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.Coins_providerRow__tsagA {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.Coins_brandBtn__uCG7t {
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.Coins_activeTossBtn__rXyep {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.Coins_activeKakaoBtn__hAfUN {
+  border-color: #fee500;
+  box-shadow: 0 0 0 3px rgba(254, 229, 0, 0.25);
+}
+
+.Coins_grid___Fc6Z {
+  display: grid;
+  grid-gap: 12px;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.Coins_pack__w0Ccv {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  grid-gap: 6px;
+  gap: 6px;
+  text-align: center;
+}
+
+.Coins_coins__kORcB {
+  font-weight: 800;
+}
+
+.Coins_price__TLnmW {
+  color: #6b7280;
+}
+
+.Coins_buyBtn__dSbo4 {
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 0;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.05s ease, box-shadow 0.15s ease;
+}
+
+.Coins_buyBtn__dSbo4:active { transform: translateY(1px); }
+
+.Coins_divider__fwwQb { margin: 16px 0; border-top: 1px solid #eef1f5; }
+
+.Coins_widgetArea__GDU2C { display: grid; grid-gap: 8px; gap: 8px; }
+
+.Coins_balancePanel__74E4J { margin-top: 16px; }
+
+.Coins_refreshBtn__WCQ_5 {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+.Coins_refreshBtn__WCQ_5:hover { background: #f9fafb; }
+.Coins_refreshBtn__WCQ_5:active { transform: translateY(1px); }
+
+.Coins_brandIcon__4d7Tz { width: 24px; height: 24px; display: inline-block; }
+.Coins_brandImg__4NSWk { width: 24px; height: 24px; display: inline-block; }
+.Coins_brandImgLarge__mRQD0 { height: 28px; width: auto; display: inline-block; }
+
+
+

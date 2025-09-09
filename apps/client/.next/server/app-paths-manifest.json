@@ -1,7 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/(main)/coins/page": "app/(main)/coins/page.js",
-  "/(main)/coins/success/page": "app/(main)/coins/success/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
   "/(main)/page": "app/(main)/page.js",
-  "/(main)/profile/page": "app/(main)/profile/page.js"
+  "/(main)/profile/page": "app/(main)/profile/page.js",
+  "/(main)/coins/page": "app/(main)/coins/page.js",
+  "/(main)/coins/success/page": "app/(main)/coins/success/page.js"
 }

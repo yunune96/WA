@@ -1,0 +1,21 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdate_N_E"]("app/(main)/coins/page",{
+
+/***/ "(app-pages-browser)/./styles/Coins.module.css":
+/*!*********************************!*\
+  !*** ./styles/Coins.module.css ***!
+  \*********************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+eval(__webpack_require__.ts("// extracted by mini-css-extract-plugin\nmodule.exports = {\"wrapper\":\"Coins_wrapper__z4_i6\",\"header\":\"Coins_header__b8xJd\",\"title\":\"Coins_title__ok32q\",\"segment\":\"Coins_segment__1S9ao\",\"segBtn\":\"Coins_segBtn__EwhGg\",\"segBtnToss\":\"Coins_segBtnToss__p7tE4\",\"segBtnKakao\":\"Coins_segBtnKakao__ycjPE\",\"activeToss\":\"Coins_activeToss__2mD8J\",\"activeKakao\":\"Coins_activeKakao__3eYeP\",\"grid\":\"Coins_grid___Fc6Z\",\"pack\":\"Coins_pack__w0Ccv\",\"coins\":\"Coins_coins__kORcB\",\"price\":\"Coins_price__TLnmW\",\"buyBtn\":\"Coins_buyBtn__dSbo4\",\"divider\":\"Coins_divider__fwwQb\",\"widgetArea\":\"Coins_widgetArea__GDU2C\",\"balancePanel\":\"Coins_balancePanel__74E4J\",\"refreshBtn\":\"Coins_refreshBtn__WCQ_5\"};\n    if(true) {\n      // 1757397010175\n      var cssReload = __webpack_require__(/*! ../../node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js */ \"(app-pages-browser)/../../node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js\")(module.id, {\"publicPath\":\"/_next/\",\"esModule\":false,\"locals\":true});\n      module.hot.dispose(cssReload);\n      \n    }\n  \nmodule.exports.__checksum = \"753d5ad9828e\"\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwcC1wYWdlcy1icm93c2VyKS8uL3N0eWxlcy9Db2lucy5tb2R1bGUuY3NzIiwibWFwcGluZ3MiOiJBQUFBO0FBQ0Esa0JBQWtCO0FBQ2xCLE9BQU8sSUFBVTtBQUNqQjtBQUNBLHNCQUFzQixtQkFBTyxDQUFDLGdOQUFxSCxjQUFjLHNEQUFzRDtBQUN2TixNQUFNLFVBQVU7QUFDaEI7QUFDQTtBQUNBO0FBQ0EseUJBQXlCIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vX05fRS8uL3N0eWxlcy9Db2lucy5tb2R1bGUuY3NzPzI4MjkiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gZXh0cmFjdGVkIGJ5IG1pbmktY3NzLWV4dHJhY3QtcGx1Z2luXG5tb2R1bGUuZXhwb3J0cyA9IHtcIndyYXBwZXJcIjpcIkNvaW5zX3dyYXBwZXJfX3o0X2k2XCIsXCJoZWFkZXJcIjpcIkNvaW5zX2hlYWRlcl9fYjh4SmRcIixcInRpdGxlXCI6XCJDb2luc190aXRsZV9fb2szMnFcIixcInNlZ21lbnRcIjpcIkNvaW5zX3NlZ21lbnRfXzFTOWFvXCIsXCJzZWdCdG5cIjpcIkNvaW5zX3NlZ0J0bl9fRXdoR2dcIixcInNlZ0J0blRvc3NcIjpcIkNvaW5zX3NlZ0J0blRvc3NfX3A3dEU0XCIsXCJzZWdCdG5LYWthb1wiOlwiQ29pbnNfc2VnQnRuS2FrYW9fX3ljalBFXCIsXCJhY3RpdmVUb3NzXCI6XCJDb2luc19hY3RpdmVUb3NzX18ybUQ4SlwiLFwiYWN0aXZlS2FrYW9cIjpcIkNvaW5zX2FjdGl2ZUtha2FvX18zZVllUFwiLFwiZ3JpZFwiOlwiQ29pbnNfZ3JpZF9fX0ZjNlpcIixcInBhY2tcIjpcIkNvaW5zX3BhY2tfX3cwQ2N2XCIsXCJjb2luc1wiOlwiQ29pbnNfY29pbnNfX2tPUmNCXCIsXCJwcmljZVwiOlwiQ29pbnNfcHJpY2VfX1RMbm1XXCIsXCJidXlCdG5cIjpcIkNvaW5zX2J1eUJ0bl9fZFNibzRcIixcImRpdmlkZXJcIjpcIkNvaW5zX2RpdmlkZXJfX2Z3d1FiXCIsXCJ3aWRnZXRBcmVhXCI6XCJDb2luc193aWRnZXRBcmVhX19HRFUyQ1wiLFwiYmFsYW5jZVBhbmVsXCI6XCJDb2luc19iYWxhbmNlUGFuZWxfXzc0RTRKXCIsXCJyZWZyZXNoQnRuXCI6XCJDb2luc19yZWZyZXNoQnRuX19XQ1FfNVwifTtcbiAgICBpZihtb2R1bGUuaG90KSB7XG4gICAgICAvLyAxNzU3Mzk3MDEwMTc1XG4gICAgICB2YXIgY3NzUmVsb2FkID0gcmVxdWlyZShcIkM6L1BlcnNvbmFsUHJvamVjdC9XaXRob3V0QWxvbmUvbm9kZV9tb2R1bGVzL25leHQvZGlzdC9jb21waWxlZC9taW5pLWNzcy1leHRyYWN0LXBsdWdpbi9obXIvaG90TW9kdWxlUmVwbGFjZW1lbnQuanNcIikobW9kdWxlLmlkLCB7XCJwdWJsaWNQYXRoXCI6XCIvX25leHQvXCIsXCJlc01vZHVsZVwiOmZhbHNlLFwibG9jYWxzXCI6dHJ1ZX0pO1xuICAgICAgbW9kdWxlLmhvdC5kaXNwb3NlKGNzc1JlbG9hZCk7XG4gICAgICBcbiAgICB9XG4gIFxubW9kdWxlLmV4cG9ydHMuX19jaGVja3N1bSA9IFwiNzUzZDVhZDk4MjhlXCJcbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(app-pages-browser)/./styles/Coins.module.css\n"));
+
+/***/ })
+
+});

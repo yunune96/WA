@@ -1,0 +1,14 @@
+<svg width="96" height="32" viewBox="0 0 96 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+  <title>Toss</title>
+  <!-- Toss symbol -->
+  <defs>
+    <linearGradient id="tossGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3171FF"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <path d="M22 16c0-6.627-5.373-12-12-12C6.477 4 4 6.477 4 9.5 4 13.642 9.373 16 16 16c2.915 0 5.582.78 7.967 2.056.028-.685.033-1.371.033-2.056z" fill="url(#tossGrad)"/>
+  <!-- 'toss' text (approx.) -->
+  <text x="34" y="21" font-size="16" font-weight="800" fill="#2C2F36" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">toss</text>
+</svg>
+

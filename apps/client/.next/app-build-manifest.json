@@ -1,9 +1,10 @@
 {
   "pages": {
-    "/(main)/coins/page": [
+    "/(main)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(main)/coins/page.js"
+      "static/css/app/(main)/page.css",
+      "static/chunks/app/(main)/page.js"
     ],
     "/(main)/layout": [
       "static/chunks/webpack.js",
@@ -17,22 +18,28 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(main)/coins/success/page": [
+    "/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(main)/coins/success/page.js"
-    ],
-    "/(main)/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(main)/page.css",
-      "static/chunks/app/(main)/page.js"
+      "static/css/app/(auth)/login/page.css",
+      "static/chunks/app/(auth)/login/page.js"
     ],
     "/(main)/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/(main)/profile/page.css",
       "static/chunks/app/(main)/profile/page.js"
+    ],
+    "/(main)/coins/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(main)/coins/page.css",
+      "static/chunks/app/(main)/coins/page.js"
+    ],
+    "/(main)/coins/success/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(main)/coins/success/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

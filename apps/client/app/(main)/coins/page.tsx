@@ -1,16 +1,26 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { paymentsApi, coinsApi } from "@/lib/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
+import styles from "@/styles/Coins.module.css";
 
 export default function CoinsPage() {
-  const [coins, setCoins] = useState(10);
+  const [coins, setCoins] = useState(50);
   const [provider, setProvider] = useState<"toss" | "kakao">("toss");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
   const params = useSearchParams();
+
+  const packs = useMemo(
+    () => [
+      { coins: 10, price: 1000 },
+      { coins: 50, price: 5000 },
+      { coins: 100, price: 10000 },
+    ],
+    []
+  );
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -51,44 +61,69 @@ export default function CoinsPage() {
   };
 
   return (
-    <div style={{ padding: 16 }}>
-      <h1>코인 구매</h1>
-      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-        {[10, 50, 100].map((c) => (
-          <button key={c} onClick={() => setCoins(c)} disabled={loading}>
-            {c}코인 (₩{c * 100})
+    <div className={styles.wrapper}>
+      <div className={styles.header}>
+        <div className={styles.title}>💰 코인 충전</div>
+        <div className={styles.providerRow}>
+          <button
+            className={`${styles.brandBtn} ${
+              provider === "toss" ? styles.activeTossBtn : ""
+            }`}
+            onClick={() => setProvider("toss")}
+            aria-pressed={provider === "toss"}
+            aria-label="토스페이"
+            title="토스페이"
+          >
+            <img src="/brands/toss.svg" alt="" className={styles.brandImgLarge} />
           </button>
+          <button
+            className={`${styles.brandBtn} ${
+              provider === "kakao" ? styles.activeKakaoBtn : ""
+            }`}
+            onClick={() => setProvider("kakao")}
+            aria-pressed={provider === "kakao"}
+            aria-label="카카오페이"
+            title="카카오페이"
+          >
+            <img src="/brands/kakaopay.svg" alt="" className={styles.brandImgLarge} />
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.grid}>
+        {packs.map((p) => (
+          <div key={p.coins} className={styles.pack}>
+            <div className={styles.coins}>{p.coins} 코인</div>
+            <div className={styles.price}>₩{p.price.toLocaleString()}</div>
+            <button
+              className={styles.buyBtn}
+              onClick={() => setCoins(p.coins)}
+              disabled={loading}
+            >
+              {coins === p.coins ? "선택됨" : "선택"}
+            </button>
+          </div>
         ))}
       </div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-        <label>
-          <input
-            type="radio"
-            name="provider"
-            checked={provider === "toss"}
-            onChange={() => setProvider("toss")}
-          />
-          토스페이먼츠
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="provider"
-            checked={provider === "kakao"}
-            onChange={() => setProvider("kakao")}
-          />
-          카카오페이
-        </label>
-      </div>
-      <button onClick={handleCheckout} disabled={loading}>
-        {loading ? "처리 중..." : `${coins}코인 결제하기`}
+
+      <div style={{ height: 8 }} />
+      <button
+        onClick={handleCheckout}
+        className={styles.buyBtn}
+        disabled={loading}
+      >
+        {loading ? "결제 준비 중..." : `${coins}코인 결제하기`}
       </button>
       {message && <p style={{ marginTop: 12 }}>{message}</p>}
 
-      <hr style={{ margin: "16px 0" }} />
-      <div id="payment-widget" />
-      <div id="agreement" />
-      <BalancePanel />
+      <div className={styles.divider} />
+      <div className={styles.widgetArea}>
+        <div id="payment-widget" />
+        <div id="agreement" />
+      </div>
+      <div className={styles.balancePanel}>
+        <BalancePanel />
+      </div>
     </div>
   );
 }
@@ -108,7 +143,9 @@ function BalancePanel() {
 
   return (
     <div>
-      <button onClick={refresh}>잔액/내역 새로고침</button>
+      <button onClick={refresh} className={styles.refreshBtn}>
+        🔄 잔액/내역 새로고침
+      </button>
       <div style={{ marginTop: 8 }}>잔액: {balance ?? "-"} 코인</div>
       <ul>
         {txs.map((t) => (

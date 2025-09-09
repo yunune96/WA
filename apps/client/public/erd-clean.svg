@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <style><![CDATA[
+      .box { fill:#ffffff; stroke:#d1d5db; stroke-width:1.2; rx:10; }
+      .title { font: 700 14px "Inter", Arial, sans-serif; fill:#111827; }
+      .field { font: 12px "Inter", Arial, sans-serif; fill:#374151; }
+      .note { font: 11px "Inter", Arial, sans-serif; fill:#6b7280; }
+      .link { stroke:#94a3b8; stroke-width:1.5; fill:none; }
+    ]]></style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <!-- Layout: Left→Right 레이어링으로 교차 최소화 -->
+  <g id="entities">
+    <!-- Column 1 (Left) -->
+    <rect class="box" x="80" y="60" width="300" height="180"/>
+    <text class="title" x="100" y="86">User</text>
+    <text class="field" x="100" y="112">id (PK), email (UNIQUE)</text>
+    <text class="field" x="100" y="132">username, isEmailVerified</text>
+    <text class="field" x="100" y="152">createdAt, updatedAt</text>
+
+    <rect class="box" x="80" y="280" width="240" height="120"/>
+    <text class="title" x="100" y="306">Hobby</text>
+    <text class="field" x="100" y="332">id (PK), name (UNIQUE)</text>
+
+    <rect class="box" x="80" y="420" width="360" height="140"/>
+    <text class="title" x="100" y="446">Connection_Request</text>
+    <text class="field" x="100" y="472">id (PK), requesterId (FK→User)</text>
+    <text class="field" x="100" y="492">receiverId (FK→User), status, message</text>
+
+    <!-- Column 2 -->
+    <rect class="box" x="460" y="60" width="240" height="120"/>
+    <text class="title" x="480" y="86">Wallet</text>
+    <text class="field" x="480" y="112">userId (PK, FK→User), balance</text>
+
+    <rect class="box" x="460" y="220" width="240" height="120"/>
+    <text class="title" x="480" y="246">User_Location</text>
+    <text class="field" x="480" y="272">userId (PK, FK→User)</text>
+    <text class="field" x="480" y="292">latitude, longitude, updatedAt</text>
+
+    <rect class="box" x="460" y="360" width="260" height="120"/>
+    <text class="title" x="480" y="386">User_Hobbies</text>
+    <text class="field" x="480" y="412">userId (PK, FK→User)</text>
+    <text class="field" x="480" y="432">hobbyId (PK, FK→Hobby)</text>
+
+    <!-- Column 3 (Chat) -->
+    <rect class="box" x="820" y="60" width="260" height="110"/>
+    <text class="title" x="840" y="86">Chat_Room</text>
+    <text class="field" x="840" y="112">id (PK), createdAt</text>
+
+    <rect class="box" x="820" y="220" width="260" height="140"/>
+    <text class="title" x="840" y="246">Message</text>
+    <text class="field" x="840" y="272">id (PK), roomId (FK→Chat_Room)</text>
+    <text class="field" x="840" y="292">senderId (FK→User), content</text>
+
+    <rect class="box" x="820" y="380" width="300" height="140"/>
+    <text class="title" x="840" y="406">Chat_Room_Participant</text>
+    <text class="field" x="840" y="432">userId (PK, FK→User)</text>
+    <text class="field" x="840" y="452">roomId (PK, FK→Chat_Room)</text>
+    <text class="field" x="840" y="472">joinedAt, lastReadAt</text>
+
+    <!-- Column 4 (Payments) -->
+    <rect class="box" x="1180" y="60" width="300" height="160"/>
+    <text class="title" x="1200" y="86">PaymentOrder</text>
+    <text class="field" x="1200" y="112">id (PK), userId (FK→User)</text>
+    <text class="field" x="1200" y="132">coins, amountKrw</text>
+    <text class="field" x="1200" y="152">provider, status, providerOrderId (UNIQUE)</text>
+
+    <rect class="box" x="1180" y="260" width="300" height="150"/>
+    <text class="title" x="1200" y="286">CoinTransaction</text>
+    <text class="field" x="1200" y="312">id (PK), userId (FK→User)</text>
+    <text class="field" x="1200" y="332">change, reason</text>
+    <text class="field" x="1200" y="352">orderId (FK→PaymentOrder)</text>
+  </g>
+
+  <!-- Orthogonal/curved connectors -->
+  <g id="relations">
+    <!-- Anchor: User right mid (380,150) -->
+    <!-- User → Wallet (to left mid at 460,120) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 120 H 460"/>
+    <!-- User → User_Location (to left mid at 460,280) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 280 H 460"/>
+    <!-- User → User_Hobbies (to left mid at 460,420) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 420 H 460"/>
+    <!-- Hobby (320,340) → User_Hobbies (460,420) with elbow -->
+    <path class="link" marker-end="url(#arrow)" d="M320 340 H 420 V 420 H 460"/>
+    <!-- User bottom mid (230,240) → Connection_Request top mid (260,420) -->
+    <path class="link" marker-end="url(#arrow)" d="M230 240 V 400 H 260 V 420"/>
+
+    <!-- Payments via top bus (y=40) to avoid crossing entities) -->
+    <!-- User → PaymentOrder (left mid 1180,140) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 40 H 1180 V 140"/>
+    <!-- PaymentOrder bottom mid (1330,220) → CoinTransaction top mid (1330,260) -->
+    <path class="link" marker-end="url(#arrow)" d="M1330 220 V 260"/>
+    <!-- User → CoinTransaction (left mid 1180,335) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 40 H 1180 V 335"/>
+
+    <!-- Chat relations via top bus (y=40) -->
+    <!-- User → Message (left mid 820,290) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 40 H 820 V 290"/>
+    <!-- User → Chat_Room_Participant (left mid 820,450) -->
+    <path class="link" marker-end="url(#arrow)" d="M380 150 V 40 H 820 V 450"/>
+    <!-- Chat_Room bottom mid (950,170) to Message/Participant -->
+    <path class="link" marker-end="url(#arrow)" d="M950 170 V 220"/>
+    <path class="link" marker-end="url(#arrow)" d="M950 170 V 380"/>
+  </g>
+
+  <text class="note" x="80" y="36">WithoutAlone - ERD (정리 버전, 선 교차 최소화)</text>
+</svg>
+
+
