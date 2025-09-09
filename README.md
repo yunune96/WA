@@ -46,6 +46,10 @@
 
 <img width="2353" height="1536" alt="image" src="https://github.com/user-attachments/assets/83132ee2-c621-4b7a-bea2-3d2e89bb54c5" />
 
+## ERD
+<img width="987" height="598" alt="ERD" src="https://github.com/user-attachments/assets/7e540c66-642b-4074-a8d5-c6f0948a1e86" />
+
+
 ## 빠른 시작
 
 요약: `npm install` → `npm run server:dev` → `npm run client:dev`
