@@ -83,14 +83,66 @@
 .formContainer {
   position: relative;
   overflow: visible; /* 안내 문구 잘림 방지 */
-  min-height: 420px; /* 여유 공간 확보 */
+  min-height: 280px; /* 기본(로그인) 기준 높이 */
 }
+.formContainerLogin { min-height: 280px; }
+.formContainerSignup { min-height: 360px; }
 .formWrapper {
   position: absolute;
   width: 100%;
   transition: all 0.3s ease-in-out;
   will-change: transform, opacity;
 }
+.socialSection {
+  margin-top: 0.5rem;
+}
+.socialDivider {
+  position: relative;
+  text-align: center;
+  margin: 0.5rem 0 0.75rem;
+}
+.socialDivider::before,
+.socialDivider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #e5e7eb;
+}
+.socialDivider::before { left: 0; }
+.socialDivider::after { right: 0; }
+.socialDividerText {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #ffffff;
+  padding: 0 0.5rem;
+}
+.socialButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.socialBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+}
+.socialBtn:hover { background: #f9fafb; }
+.googleBtn svg { display: block; }
+.kakaoBtn {
+  background: #fee500;
+  border-color: #f7d200;
+}
+.kakaoBtn span { color: #3c1e1e; font-weight: 600; }
 .formVisible {
   opacity: 1;
   transform: translateY(0);

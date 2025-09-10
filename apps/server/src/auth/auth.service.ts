@@ -170,6 +170,69 @@ export class AuthService {
     };
   }
 
+  private async generateRandomPasswordHash(): Promise<string> {
+    const random = `${Date.now()}-${Math.random()}-${process.env.JWT_SECRET || "secret"}`;
+    return bcrypt.hash(random, 10);
+  }
+
+  private async findOrCreateOAuthUser(params: {
+    email: string;
+    username?: string | null;
+  }): Promise<{
+    id: string;
+    email: string;
+    username: string | null;
+    isEmailVerified: boolean;
+  }> {
+    const { email, username } = params;
+    let user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      const passwordHash = await this.generateRandomPasswordHash();
+      user = await this.prisma.user.create({
+        data: {
+          email,
+          password: passwordHash,
+          username: username ?? null,
+          isEmailVerified: true,
+        },
+      });
+    } else if (!user.isEmailVerified) {
+      // 소셜 로그인 시 이메일은 공급자에서 검증되므로 인증 처리
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { isEmailVerified: true },
+      });
+    }
+    const { password: _pw, ...result } = user;
+    return result;
+  }
+
+  async oauthLogin(params: {
+    provider: "google" | "kakao";
+    email: string;
+    username?: string | null;
+  }): Promise<LoginResponse> {
+    const user = await this.findOrCreateOAuthUser({
+      email: params.email,
+      username: params.username,
+    });
+    const payload = { email: user.email, sub: user.id };
+    const accessToken = this.jwtService.sign(payload);
+    const needsOnboarding = (await this.prisma.user.findUnique({
+      where: { id: user.id },
+      include: { _count: { select: { hobbies: true } } },
+    }))!._count.hobbies === 0;
+    return {
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        needsOnboarding,
+      },
+    };
+  }
+
   async resendVerification(email: string): Promise<void> {
     // 5분 레이트리밋 (이메일 기준)
     const rlKey = `rl:verify-resend:${email}`;

@@ -117,6 +117,68 @@ export class AuthController {
     return { success: true };
   }
 
+  // Google OAuth 시작 -> 콜백
+  @Get("/google")
+  @UseGuards(AuthGuard("google"))
+  @ApiOperation({ summary: "구글 로그인 시작" })
+  authGoogle() {
+    return true;
+  }
+
+  @Get("/google/callback")
+  @UseGuards(AuthGuard("google"))
+  @ApiOperation({ summary: "구글 로그인 콜백" })
+  async googleCallback(
+    @User() user: { email: string; username?: string | null },
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const result = await this.authService.oauthLogin({
+      provider: "google",
+      email: user.email,
+      username: user.username ?? null,
+    });
+    const cookieOptions: CookieOptions = {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      path: "/",
+    };
+    res.cookie("accessToken", result.accessToken, cookieOptions);
+    const frontend = process.env.FRONTEND_URL || "http://localhost:3000";
+    return res.redirect(`${frontend}`);
+  }
+
+  // Kakao OAuth 시작 -> 콜백
+  @Get("/kakao")
+  @UseGuards(AuthGuard("kakao"))
+  @ApiOperation({ summary: "카카오 로그인 시작" })
+  authKakao() {
+    return true;
+  }
+
+  @Get("/kakao/callback")
+  @UseGuards(AuthGuard("kakao"))
+  @ApiOperation({ summary: "카카오 로그인 콜백" })
+  async kakaoCallback(
+    @User() user: { email: string; username?: string | null },
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const result = await this.authService.oauthLogin({
+      provider: "kakao",
+      email: user.email,
+      username: user.username ?? null,
+    });
+    const cookieOptions: CookieOptions = {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      path: "/",
+    };
+    res.cookie("accessToken", result.accessToken, cookieOptions);
+    const frontend = process.env.FRONTEND_URL || "http://localhost:3000";
+    return res.redirect(`${frontend}`);
+  }
+
   @Get("/verify")
   @UseGuards(AuthGuard("jwt"))
   @ApiOperation({ summary: "토큰 검증 및 사용자 정보 반환" })

@@ -86,6 +86,17 @@ REDIS_PORT=6379
 REDIS_PASSWORD=
 # 게이트웨이 CORS용(선택): 프론트 오리진
 NEXT_PUBLIC_CLIENT_URL=http://localhost:3000
+
+# 소셜 로그인(OAuth) 옵션
+# 구글
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_CALLBACK_URL=http://localhost:3001/api/auth/google/callback
+# 카카오
+KAKAO_CLIENT_ID=your-kakao-rest-api-key
+# KAKAO_CLIENT_SECRET(선택): 카카오 앱에 비밀키 사용 시에만 필요
+KAKAO_CLIENT_SECRET=
+KAKAO_CALLBACK_URL=http://localhost:3001/api/auth/kakao/callback
 ```
 
 클라이언트(.env.local 예시)

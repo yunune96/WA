@@ -31,6 +31,13 @@ import { CoinsModule } from "./coins/coins.module";
         REDIS_PORT: Joi.number().required(),
         REDIS_PASSWORD: Joi.string().optional().allow(""),
         SERVER_PUBLIC_URL: Joi.string().uri().optional(),
+        // OAuth (optional)
+        GOOGLE_CLIENT_ID: Joi.string().optional(),
+        GOOGLE_CLIENT_SECRET: Joi.string().optional(),
+        GOOGLE_CALLBACK_URL: Joi.string().uri().optional(),
+        KAKAO_CLIENT_ID: Joi.string().optional(),
+        KAKAO_CLIENT_SECRET: Joi.string().optional(),
+        KAKAO_CALLBACK_URL: Joi.string().uri().optional(),
         COIN_UNIT_PRICE: Joi.number().default(100),
         PAYMENT_PROVIDER: Joi.string().valid("toss", "kakao").optional(),
         TOSS_SECRET_KEY: Joi.string().optional(),

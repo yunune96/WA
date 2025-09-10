@@ -10,6 +10,8 @@ import { RedisModule } from "../core/redis/redis.module";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import { GoogleStrategy } from "./strategies/google.strategy";
+import { KakaoStrategy } from "./strategies/kakao.strategy";
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, KakaoStrategy],
   exports: [PassportModule],
 })
 export class AuthModule {}
