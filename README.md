@@ -2,6 +2,8 @@
 
 프로젝트 요약: 위치 기반 취미 매칭 데모 애플리케이션. 실시간 초대/채팅, 지도 기반 주변 탐색, JWT 인증과 httpOnly 쿠키, Redis GEO + PostGIS 거리 계산을 통해 “빠르게 매칭되고 바로 대화”까지 이어지는 경험을 제공합니다.
 
+[withoutaloneppt.pptx](https://github.com/user-attachments/files/22993593/withoutaloneppt.pptx)
+
 ## 기술 스택
 
 - ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
